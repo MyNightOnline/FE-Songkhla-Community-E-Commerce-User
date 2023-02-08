@@ -21,7 +21,17 @@ const router = createRouter({
         {
           path: '/shop',
           name: 'shop',
+          component: () => import('@/views/PageNotFound.vue')
+        },
+        {
+          path: '/shop/:id',
+          name: 'shopId',
           component: () => import('@/views/Shop/MainShop.vue')
+        },
+        {
+          path: '/cart',
+          name: 'cart',
+          component: () => import('@/views/Shop/Cart.vue')
         },
         // authentication
         {

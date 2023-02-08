@@ -55,16 +55,42 @@ export default defineComponent({
     async getData() {
       const { data } = await axiosClient.get(`/commu`)
       this.defaultData = data
-      this.showData = data
+
+      const productsData = await axiosClient.get('/products')
+      const categoryData = await axiosClient.get('/category')
+
+      this.defaultData.filter(el => {
+        el = { ...el, items: [] }
+        productsData.data.filter(el2 => {
+          if ((el.users_commu_id === el2.users_commu_id)) {
+            categoryData.data.filter(el3 => {
+              if (el2.category_id === el3.category_id) {
+                el.items.push({
+                  name: el2.name,
+                  otop: el2.otop,
+                  category: el3.name
+                })
+              }
+            })
+
+            this.showData.push(el)
+          }
+        })
+      })
+      this.showData = [...new Set(this.showData)]
+      this.defaultData = this.showData
     },
     filterData() {
       const val_input = document.querySelector('#search').value
-      let newData = this.defaultData.filter((el) => {
-        if (el.name.includes(val_input) || el.amp.includes(val_input)) {
+      let newDataIn = this.defaultData.filter((el) => {
+        if (
+          el.name.includes(val_input) ||
+          el.amp.includes(val_input) ||
+          el.items[0].category.includes(val_input)) {
           return el
         }
       })
-      this.showData = newData
+      this.showData = newDataIn
     },
     async fetchData() {
       this.ampAll = getAmphure()
