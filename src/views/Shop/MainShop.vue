@@ -67,6 +67,7 @@ export default defineComponent({
                                     id: el2.product_id,
                                     name: el2.name,
                                     otop: el2.otop,
+                                    img: el2.product_image,
                                     category: el3.name,
                                     gram: el2.gram,
                                     quantity: el2.quantity,

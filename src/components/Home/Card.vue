@@ -16,6 +16,7 @@
                 <span class="font-semibold">ประเภทกิจการ</span>: {{ communityData.items[0].category }}
             </p>
             <Rating :get-star="communityData.items[0].otop" />
+
         </div>
     </div>
 </template>
