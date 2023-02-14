@@ -8,23 +8,21 @@ import { defineComponent } from "vue"
 export default defineComponent({
     props: [
         "ampAll",
-        "categoryData"
+        "categoryData",
+        "filterData",
+        "filterDataSearch",
     ],
     data: () => ({
+
     }),
     mounted() {
     },
     methods: {
-        logAMP() {
-            var e1 = document.getElementById('amp').value
-            var e2 = document.getElementById('category').value
-            console.log(`${e1} ::: ${e2}`)
-        },
         resetData() {
             document.getElementById('amp').value = ""
             document.getElementById('category').value = ""
             document.getElementById("bordered-radio-0").checked = true
-        }
+        },
     }
 })
 </script>
@@ -144,7 +142,7 @@ export default defineComponent({
                 </div>
                 <!-- Modal footer -->
                 <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button data-modal-hide="defaultModal" type="button"
+                    <button data-modal-hide="defaultModal" type="button" @click="filterData"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         ตกลง
                     </button>

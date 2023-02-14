@@ -53,60 +53,77 @@ export default defineComponent({
   methods: {
     async getData() {
       this.ampAll = getAmphure()
-      this.categoryAll = await axiosClient.get("/category").data
-      
+
       let { data } = await axiosClient.get('/products')
+      let community = await axiosClient.get('/commu')
+      let category = await axiosClient.get("/category")
+      this.categoryAll = category.data
+
       data.filter(async (product) => {
-        return this.defaultData.push({
-          product_name: product.name,
-          product_image: product.product_image,
-          otop: product.otop,
-          users_commu_id: product.users_commu_id,
-          category_id: product.category_id,
-          amp: community.amp
+        community.data.map(commu => {
+          if (product.users_commu_id == commu.users_commu_id) {
+            category.data.map(type => {
+              if (product.category_id == type.category_id) {
+                return this.defaultData.push({
+                  product_name: product.name,
+                  product_image: product.product_image,
+                  otop: product.otop,
+                  users_commu_id: product.users_commu_id,
+                  category_id: product.category_id,
+                  community_name: commu.name,
+                  amp: commu.amp,
+                  category_name: type.name
+                })
+              }
+            })
+          }
         })
       })
       this.showData = this.defaultData
-      console.log(this.defaultData)
-      // const { data } = await axiosClient.get(`/commu`)
-      // this.defaultData = data
-
-      // const productsData = await axiosClient.get('/products')
-      // const categoryData = await axiosClient.get('/category')
-
-      // this.defaultData.filter(el => {
-      //   el = { ...el, items: [] }
-      //   productsData.data.filter(el2 => {
-      //     if ((el.users_commu_id === el2.users_commu_id)) {
-      //       categoryData.data.filter(el3 => {
-      //         if (el2.category_id === el3.category_id) {
-      //           el.items.push({
-      //             name: el2.name,
-      //             otop: el2.otop,
-      //             category: el3.name
-      //           })
-      //         }
-      //       })
-
-      //       this.showData.push(el)
-      //     }
-      //   })
-      // })
-      // this.showData = [...new Set(this.showData)]
-      // this.defaultData = this.showData
     },
     filterData() {
-      const val_input = document.querySelector('#search').value
-      let newDataIn = this.defaultData.filter((el) => {
-        if (
-          el.product_name.includes(val_input) ||
-          el.amp.includes(val_input) ||
-          el.items[0].category.includes(val_input)) {
-          return el
-        }
-      })
+
+      const input_radio = document.getElementsByName('bordered-radio')
+      let check_amp = document.getElementById('amp').value
+      let check_category = document.getElementById('category').value
+
+      let newDataIn
+
+      if (input_radio[0].checked == true) {
+
+        newDataIn = this.defaultData.filter((el) => {
+          if (check_amp == '' && check_category == '') return newDataIn = this.defaultData
+          else if ((check_amp) && (check_category == '')) return el.amp == check_amp
+          else if (check_category && (check_amp == '')) return el.category_name == check_category
+          else if (check_category && check_amp) return el.category_name == check_category && el.amp == check_amp
+        })
+      } else {
+        let _index
+        input_radio.forEach((item, index) => {
+          if (item.checked == true) return _index = index
+        })
+
+        newDataIn = this.defaultData.filter((el) => {
+          if (check_amp == '' && check_category == '') return newDataIn = this.defaultData && el.otop == _index
+          else if ((check_amp) && (check_category == '')) return el.amp == check_amp && el.otop == _index
+          else if (check_category && (check_amp == '')) return el.category_name == check_category && el.otop == _index
+          else if (check_category && check_amp) return el.category_name == check_category && el.amp == check_amp && el.otop == _index
+        })
+      }
       this.showData = newDataIn
     },
+    filterDataSearch() {
+      const val_input = document.querySelector('#search').value
+      let newDataIn = this.defaultData.filter((el) => {
+        let checkedTxT =
+          el.community_name.includes(val_input) ||
+          el.product_name.includes(val_input) ||
+          el.amp.includes(val_input) ||
+          el.category_name.includes(val_input)
+        if (checkedTxT) return el
+      })
+      this.showData = newDataIn
+    }
   }
 })
 </script>
@@ -119,8 +136,9 @@ export default defineComponent({
 
     <div class="flex justify-end">
 
-      <FromSearch :filterData="filterData" />
-      <FilterModal :ampAll="ampAll" :categoryData="categoryAll" />
+      <FromSearch :filterDataSearch="filterDataSearch" />
+      <FilterModal :ampAll="ampAll" :categoryData="categoryAll" :filterData="filterData"
+        :filterDataSearch="filterDataSearch" />
 
     </div>
 

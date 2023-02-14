@@ -5,14 +5,14 @@ import { defineComponent } from 'vue'
 export default defineComponent({
 
     props: {
-        filterData: Function
+        filterDataSearch: Function
     },
 
 })
 </script>
 
 <template>
-    <form class="mt-6 w-72" @input="filterData" v-on:submit.prevent="filterData">
+    <form class="mt-6 w-72" @input="filterDataSearch" v-on:submit.prevent="filterDataSearch">
         <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
