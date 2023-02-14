@@ -49,42 +49,57 @@ export default defineComponent({
   }),
   mounted() {
     this.getData()
-    this.fetchData()
   },
   methods: {
     async getData() {
-      const { data } = await axiosClient.get(`/commu`)
-      this.defaultData = data
-
-      const productsData = await axiosClient.get('/products')
-      const categoryData = await axiosClient.get('/category')
-
-      this.defaultData.filter(el => {
-        el = { ...el, items: [] }
-        productsData.data.filter(el2 => {
-          if ((el.users_commu_id === el2.users_commu_id)) {
-            categoryData.data.filter(el3 => {
-              if (el2.category_id === el3.category_id) {
-                el.items.push({
-                  name: el2.name,
-                  otop: el2.otop,
-                  category: el3.name
-                })
-              }
-            })
-
-            this.showData.push(el)
-          }
+      this.ampAll = getAmphure()
+      this.categoryAll = await axiosClient.get("/category").data
+      
+      let { data } = await axiosClient.get('/products')
+      data.filter(async (product) => {
+        return this.defaultData.push({
+          product_name: product.name,
+          product_image: product.product_image,
+          otop: product.otop,
+          users_commu_id: product.users_commu_id,
+          category_id: product.category_id,
+          amp: community.amp
         })
       })
-      this.showData = [...new Set(this.showData)]
-      this.defaultData = this.showData
+      this.showData = this.defaultData
+      console.log(this.defaultData)
+      // const { data } = await axiosClient.get(`/commu`)
+      // this.defaultData = data
+
+      // const productsData = await axiosClient.get('/products')
+      // const categoryData = await axiosClient.get('/category')
+
+      // this.defaultData.filter(el => {
+      //   el = { ...el, items: [] }
+      //   productsData.data.filter(el2 => {
+      //     if ((el.users_commu_id === el2.users_commu_id)) {
+      //       categoryData.data.filter(el3 => {
+      //         if (el2.category_id === el3.category_id) {
+      //           el.items.push({
+      //             name: el2.name,
+      //             otop: el2.otop,
+      //             category: el3.name
+      //           })
+      //         }
+      //       })
+
+      //       this.showData.push(el)
+      //     }
+      //   })
+      // })
+      // this.showData = [...new Set(this.showData)]
+      // this.defaultData = this.showData
     },
     filterData() {
       const val_input = document.querySelector('#search').value
       let newDataIn = this.defaultData.filter((el) => {
         if (
-          el.name.includes(val_input) ||
+          el.product_name.includes(val_input) ||
           el.amp.includes(val_input) ||
           el.items[0].category.includes(val_input)) {
           return el
@@ -92,11 +107,6 @@ export default defineComponent({
       })
       this.showData = newDataIn
     },
-    async fetchData() {
-      this.ampAll = getAmphure()
-      const { data } = await axiosClient.get("/category")
-      this.categoryAll = data
-    }
   }
 })
 </script>
