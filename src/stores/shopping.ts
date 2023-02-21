@@ -1,20 +1,23 @@
 import { defineStore } from 'pinia'
+import { calDeliveryFee } from '@/assets/functions/calDeliveryFee'
 
-interface UserInfo {
+interface ProductInfo {
+    shop_id: number
     id: number
     name: string
     quantity: number
     price: number
     gram: number
     delivery_fee: number
+    img: string
 }
 
 export const useShoppingStore = defineStore('shopping', {
     state: () => {
         return {
             count: 0,
-            cartItems: [] as UserInfo[],
-            defaultItems: [] as UserInfo[],
+            cartItems: [] as ProductInfo[],
+            defaultItems: [] as ProductInfo[],
         }
     },
     getters: {
@@ -26,9 +29,10 @@ export const useShoppingStore = defineStore('shopping', {
         increment() {
             this.count++
         },
-        addToCart(item: UserInfo) {
+        addToCart(item: ProductInfo) {
+            console.log(item)
             const index = this.cartItems.findIndex(product => product.id === item.id)
-            if (index !== -1) {
+            if (index != -1) {
                 if (item.quantity == this.cartItems[index].quantity) {
                     return alert('ไม่สามารถเพิ่มได้')
                 }
@@ -37,33 +41,36 @@ export const useShoppingStore = defineStore('shopping', {
                 this.cartItems[index].gram += item.gram
 
                 const checkGram = this.cartItems[index].gram
-                if (checkGram > 0 && checkGram <= 20) this.cartItems[index].delivery_fee = 32
-                else if (checkGram > 20 && checkGram <= 100) this.cartItems[index].delivery_fee = 37
-                else if (checkGram > 100 && checkGram <= 250) this.cartItems[index].delivery_fee = 42
-                else if (checkGram > 250 && checkGram <= 500) this.cartItems[index].delivery_fee = 52
-                else if (checkGram > 500 && checkGram <= 1000) this.cartItems[index].delivery_fee = 67
-                else if (checkGram > 1000 && checkGram <= 1500) this.cartItems[index].delivery_fee = 82
-                else if (checkGram > 1500 && checkGram <= 2000) this.cartItems[index].delivery_fee = 97
-                else if (checkGram > 2000 && checkGram <= 2500) this.cartItems[index].delivery_fee = 105
-
+                this.cartItems[index].delivery_fee = calDeliveryFee(checkGram)
             } else {
+                this.cartItems.map(product => {
+                    if (product.shop_id != item.shop_id) {
+                        if (confirm() == true) {
+                            console.log('ร้านใหม่')
+                            this.cartItems = []
+                        } else {
+                            return
+                        }
+                    }
+                })
                 this.cartItems.push({
+                    shop_id: item.shop_id,
                     id: item.id,
                     name: item.name,
                     quantity: 1,
                     gram: item.gram,
                     price: item.price,
-                    delivery_fee: 0
+                    delivery_fee: 0,
+                    img: item.img,
                 })
                 this.defaultItems.push(item)
                 const checkGram = this.cartItems[this.cartItems.length - 1].gram
-                if (checkGram > 0 && checkGram <= 20) this.cartItems[this.cartItems.length - 1].delivery_fee = 32
-                else if (checkGram > 20 && checkGram <= 100) this.cartItems[this.cartItems.length - 1].delivery_fee = 37
-                else if (checkGram > 100 && checkGram <= 250) this.cartItems[this.cartItems.length - 1].delivery_fee = 42
+                this.cartItems[this.cartItems.length - 1].delivery_fee = calDeliveryFee(checkGram)
             }
         },
-        removeFromCart(item: UserInfo) {
+        removeFromCart(item: ProductInfo) {
             this.cartItems = this.cartItems.filter(product => product.id !== item.id)
-        }
+        },
+        submitOrder() { }
     },
 })

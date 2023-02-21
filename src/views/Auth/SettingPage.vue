@@ -1,10 +1,21 @@
 <script setup>
+import { useAuthStore } from '@/stores/auth'
 
-const full_name1 = 'รดิศ ลำสุณีกาญ'
-const address = '146/5'
-const telphone = '0622199310'
-const username = 'mynight01'
+const userData = useAuthStore().user.data
 
+console.log(userData)
+
+const full_name = userData.full_name
+const address = userData.address
+const username = userData.username
+const mobile = userData.mobile
+
+</script>
+
+<script>
+export default {
+
+}
 </script>
 
 <template>
@@ -21,7 +32,7 @@ const username = 'mynight01'
                     </label>
                     <input type="text" id="full_name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        :value="full_name1" required />
+                        :value="full_name" required />
                 </div>
                 <div>
                     <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -37,7 +48,7 @@ const username = 'mynight01'
                     </label>
                     <input maxlength="10" type="tel" id="phone"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        :value="telphone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
+                        :value="mobile" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
                 </div>
             </div>
             <div class="mb-6">
@@ -71,11 +82,3 @@ const username = 'mynight01'
         </form>
     </div>
 </template>
-<script>
-export default {
-
-}
-</script>
-<style lang="">
-    
-</style>

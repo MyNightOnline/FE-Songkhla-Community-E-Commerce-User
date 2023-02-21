@@ -65,17 +65,18 @@ export default defineComponent({
                             if (el2.category_id === el3.category_id) {
                                 el.items.push({
                                     id: el2.product_id,
+                                    shop_id: el2.users_commu_id,
                                     name: el2.name,
                                     otop: el2.otop,
                                     img: el2.product_image,
                                     category: el3.name,
                                     gram: el2.gram,
                                     quantity: el2.quantity,
-                                    price: el2.price
+                                    price: el2.price,
+                                    total: el2.price
                                 })
                             }
                         })
-
                         this.showData.push(el)
                     }
                 })
@@ -98,6 +99,7 @@ export default defineComponent({
 </script>
 <template>
 
+    <!-- NONE ERROR -->
     <ProfileShop :showData="showDataInShop" />
     <div class="container mx-auto">
         <div class="my-6 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 justify-items-center">
@@ -105,6 +107,7 @@ export default defineComponent({
         </div>
     </div>
 
+    <!-- ERROR -->
     <div v-if="err" class="container mx-auto">
         <div id="toast-warning"
             class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"

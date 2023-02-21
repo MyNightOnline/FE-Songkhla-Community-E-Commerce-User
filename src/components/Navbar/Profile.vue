@@ -1,4 +1,7 @@
 <script setup>
+import { useAuthStore } from '@/stores/auth'
+
+const useAuth = useAuthStore()
 
 const props = defineProps({
     user: { type: undefined }
@@ -9,7 +12,7 @@ props.user
 
 <template>
     <div class="flex items-center md:order-2">
-        <div v-if="!user">
+        <div v-if="!useAuth.user">
             <router-link to="/signup"
                 class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
                 <span
@@ -22,7 +25,7 @@ props.user
                 เข้าสู่ระบบ
             </router-link>
         </div>
-        <button v-if="user" type="button"
+        <button v-else type="button"
             class="flex mr-3 text-sm md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
             id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom">
@@ -44,7 +47,7 @@ props.user
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a @click="useAuth.logout()"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                         Sign out
                     </a>

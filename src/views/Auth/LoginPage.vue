@@ -1,7 +1,7 @@
 <template>
     <div
         class="mt-20 w-full max-w-sm container mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <form class="space-y-6" action="#">
+        <form class="space-y-6" @submit.prevent="onSubmit">
             <h5 class="text-xl font-medium text-gray-900 dark:text-white">
                 เข้าสู่ระบบ
             </h5>
@@ -9,7 +9,7 @@
                 <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     ชื่อผู้ใช้
                 </label>
-                <input type="username" name="username" id="username"
+                <input v-model="username" type="username" name="username" id="username"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="ชื่อผู้ใช้" required>
             </div>
@@ -17,7 +17,7 @@
                 <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     รหัสผ่าน
                 </label>
-                <input type="password" name="password" id="password" placeholder="••••••••"
+                <input v-model="password" type="password" name="password" id="password" placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     required>
             </div>
@@ -48,13 +48,30 @@
             </div>
         </form>
     </div>
-
 </template>
 <script>
+import { useAuthStore } from '@/stores/auth'
 export default {
+
+    data: () => ({
+        username: '',
+        password: '',
+    }),
+
+    methods: {
+
+        async onSubmit() {
+            console.log('hi')
+
+            const authStore = useAuthStore()
+            const result = await authStore.login(this.username, this.password)
+
+            setTimeout(() => {
+                if (result == "Password or username is incorrect.") this.err = result
+            }, 2000)
+
+        },
+    },
 
 }
 </script>
-<style lang="">
-    
-</style>

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
           name: 'cart',
           component: () => import('@/views/Shop/Cart.vue')
         },
+        {
+          path: '/cart/order-details',
+          name: 'order-details',
+          component: () => import('@/views/Shop/OrderDetail.vue')
+        },
         // authentication
         {
           path: '/login',
@@ -52,6 +58,17 @@ const router = createRouter({
       ]
     },
   ]
+})
+
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login', '/signup']
+  const authRequired = !publicPages.includes(to.path)
+  const auth = useAuthStore()
+
+  if (authRequired && !auth.user) {
+    return '/login'
+  }
 })
 
 export default router
