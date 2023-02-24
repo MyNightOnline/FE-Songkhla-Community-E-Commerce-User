@@ -11,19 +11,15 @@ onMounted(() => {
     initCollapses()
     initDropdowns()
 })
-const user = null
+
 </script>
 
 <template>
-
-
     <nav class="bg-white border-b-2 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
             <Brand />
-            <Profile :user="user" />
+            <Profile />
             <Menu />
         </div>
     </nav>
-
-
 </template>

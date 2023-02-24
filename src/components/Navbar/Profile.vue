@@ -1,18 +1,32 @@
-<script setup>
+<script>
 import { useAuthStore } from '@/stores/auth'
+export default {
 
-const useAuth = useAuthStore()
+    data: () => ({
+        userData: useAuthStore(),
+        err: '',
+    }),
 
-const props = defineProps({
-    user: { type: undefined }
-})
-props.user
+    methods: {
 
+        async onSubmit() {
+
+            const authStore = useAuthStore()
+            const result = await authStore.login(this.username, this.password)
+
+            setTimeout(() => {
+                if (result.data.msg == "Password or username is incorrect.") this.err = result.data.msg
+            }, 2000)
+
+        },
+    },
+
+}
 </script>
 
 <template>
     <div class="flex items-center md:order-2">
-        <div v-if="!useAuth.user">
+        <div v-if="!userData.user">
             <router-link to="/signup"
                 class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400">
                 <span
@@ -35,19 +49,15 @@ props.user
         <!-- Dropdown menu -->
         <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
             id="user-dropdown">
-            <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">{{ user }}</span>
-            </div>
             <ul class="py-2" aria-labelledby="user-menu-button">
                 <li>
-                    <a href="#"
+                    <router-link to="/setting" href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                         Settings
-                    </a>
+                    </router-link>
                 </li>
                 <li>
-                    <a @click="useAuth.logout()"
+                    <a @click="userData.logout()"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                         Sign out
                     </a>
