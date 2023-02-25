@@ -23,8 +23,6 @@ export default {
 
         async onSubmit() {
 
-
-
             if ((this.password != '' && this.cf_password != '') && (this.password != this.cf_password)) {
                 alert('some password')
             } else if (this.mobile.length > 10) {
