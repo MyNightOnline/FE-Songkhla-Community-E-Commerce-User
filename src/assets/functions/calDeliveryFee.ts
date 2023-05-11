@@ -1,4 +1,4 @@
-const calDeliveryFee = (checkGram) => {
+const calDeliveryFee = (checkGram: any) => {
     let result = 0
     if (checkGram > 0 && checkGram <= 500) result = 45
     else if (checkGram > 500 && checkGram <= 1000) result = 45

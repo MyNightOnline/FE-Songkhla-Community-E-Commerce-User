@@ -6,6 +6,7 @@ export const useAuthStore = defineStore({
     id: 'auth',
     state: () => ({
         user: JSON.parse(localStorage.getItem('user')!),
+        full_name: ''
     }),
 
     actions: {
@@ -19,7 +20,8 @@ export const useAuthStore = defineStore({
 
             if (user.data.msg) return user.data.msg
 
-            this.user = user
+            this.user = user.data
+            this.full_name = user.data.full_name
 
             localStorage.setItem('user', JSON.stringify(user))
             router.push('/')
@@ -29,11 +31,12 @@ export const useAuthStore = defineStore({
         },
         logout() {
             this.user = null
+            this.full_name = ''
             localStorage.removeItem('user')
             router.go(0)
         },
         update(resDarta: any) {
-            
+
             const user = localStorage.getItem('user')!
             const data = JSON.parse(user)
 
@@ -48,6 +51,12 @@ export const useAuthStore = defineStore({
             localStorage.setItem('user', JSON.stringify(data))
 
             router.go(0)
+        }
+    },
+
+    getters: {
+        getUser(state) {
+            return state.full_name
         }
     }
 

@@ -20,6 +20,11 @@ const router = createRouter({
           component: () => import('@/views/AboutView.vue')
         },
         {
+          path: '/product/:id',
+          name: 'product',
+          component: () => import('@/views/ProductView.vue')
+        },
+        {
           path: '/shop',
           name: 'shop',
           component: () => import('@/views/PageNotFound.vue')
@@ -61,12 +66,14 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/signup']
+
+  const publicPages = ['/login', '/signup', '/']
   const authRequired = !publicPages.includes(to.path)
   const auth = useAuthStore()
+  const data = JSON.parse(localStorage.getItem('user')!)
+  if (data) auth.full_name = data.data.full_name
 
-  if (authRequired && !auth.user) {
+  if (authRequired && !auth.full_name) {
     return '/login'
   }
 })

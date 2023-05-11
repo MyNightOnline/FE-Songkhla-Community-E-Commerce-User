@@ -61,18 +61,20 @@ export default defineComponent({
 
       data.filter(async (product) => {
         community.data.map(commu => {
-          if (product.users_commu_id == commu.users_commu_id) {
+          if ((product.users_commu_id == commu.users_commu_id) && commu.confirm_status == 1) {
             category.data.map(type => {
               if (product.category_id == type.category_id) {
                 return this.defaultData.push({
+                  product_id: product.product_id,
                   product_name: product.name,
-                  product_image: product.product_image,
+                  product_image: product.image_1,
                   otop: product.otop,
                   users_commu_id: product.users_commu_id,
                   category_id: product.category_id,
                   community_name: commu.name,
                   amp: commu.amp,
-                  category_name: type.name
+                  category_name: type.name,
+                  price: product.price
                 })
               }
             })
@@ -129,10 +131,9 @@ export default defineComponent({
 </script>
 
 <template>
-
   <div class="container mx-auto">
 
-    <!-- <Carousel /> -->
+    <Carousel />
 
     <div class="flex justify-end">
 
@@ -142,10 +143,9 @@ export default defineComponent({
 
     </div>
 
-    <div class="my-6 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 justify-items-center">
+    <div class="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center my-6">
       <Card v-for="(item, index) in showData" :key="index" :communityData="item" />
     </div>
 
   </div>
-
 </template>
