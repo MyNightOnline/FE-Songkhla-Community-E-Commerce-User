@@ -196,16 +196,16 @@ const increase = useCartStore().increaseQuantity
 const reduce = useCartStore().reduceQuantity
 console.log(allProducts)
 
+const redi = () => {
+    return window.location.href = '/cart/order-products'
+}
+
 const calDeli = (products: any) => {
     let allGrams = 0
     products.forEach((item: any) => {
         allGrams += (item.gram * item.quantity)
     })
     return calDeliveryFee(allGrams)
-}
-
-const redi = () => {
-    return window.location.href = '/cart/order-products'
 }
 
 const calTotal = (products: any) => {

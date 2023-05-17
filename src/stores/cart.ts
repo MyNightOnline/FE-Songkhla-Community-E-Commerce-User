@@ -12,6 +12,7 @@ interface Product {
 
 interface Shop {
     shop_id: number
+    shop_name: string
     products: Product[]
 }
 
@@ -28,8 +29,10 @@ export const useCartStore = defineStore({
         async addProduct(shopId: number, product: Product): Promise<void> {
             const shopIndex = this.cart.findIndex((shop) => shop.shop_id === shopId)
             if (shopIndex === -1) {
+                const result = await axiosClient.get('/commu/' + shopId)
                 this.cart.push({
                     shop_id: shopId,
+                    shop_name: result.data.name,
                     products: [product],
                 })
             } else {

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="cartCount != 0" class="relative md:hidden">
+    <div v-if="cartCount != 0 && noPart" class="relative md:hidden">
         <button type="button" @click="$router.push('/cart')"
             class="text-white fixed mb-4 mr-4 bottom-0 right-0 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -43,11 +43,19 @@ export default defineComponent({
         CenterMenu,
         // EndMenu
     },
+    data() {
+        return {
+            noPart: false
+        }
+    },
     setup() {
         const cartStore = useCartStore()
         return {
             cartCount: cartStore.cartCount
         }
+    },
+    mounted() {
+        if (this.$route.name == '/cart/order-products') return !this.noPart
     }
 })
 </script>
