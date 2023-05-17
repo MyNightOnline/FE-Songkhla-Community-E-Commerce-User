@@ -1,6 +1,6 @@
 <template>
-    <div class="relative md:hidden">
-        <button type="button"
+    <div v-if="cartCount != 0" class="relative md:hidden">
+        <button type="button" @click="$router.push('/cart')"
             class="text-white fixed mb-4 mr-4 bottom-0 right-0 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 class="w-6 h-6">
@@ -9,11 +9,15 @@
             </svg>
 
             <span class="sr-only">Icon description</span>
+            <div
+                class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                {{ cartCount }}
+            </div>
         </button>
     </div>
 
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
-        <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
+        <div class="flex flex-wrap items-center justify-between container mx-auto p-4">
             <StartMenu />
             <CenterMenu />
             <!-- <EndMenu /> -->
@@ -27,6 +31,7 @@
 import StartMenu from '@/components/Navbar/Menu/StartMenu.vue'
 import CenterMenu from '@/components/Navbar/Menu/CenterMenu.vue'
 // import EndMenu from '@/components/Navbar/Menu/EndMenu.vue'
+import { useCartStore } from '@/stores/cart'
 
 import { defineComponent } from 'vue'
 
@@ -37,6 +42,12 @@ export default defineComponent({
         StartMenu,
         CenterMenu,
         // EndMenu
+    },
+    setup() {
+        const cartStore = useCartStore()
+        return {
+            cartCount: cartStore.cartCount
+        }
     }
 })
 </script>

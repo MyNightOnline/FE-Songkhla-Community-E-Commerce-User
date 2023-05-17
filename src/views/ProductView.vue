@@ -21,7 +21,7 @@
                     <div class="mt-2 mb-4 text-sm">
                     </div>
                     <div class="flex">
-                        <button type="button"
+                        <button type="button" @click="$router.push(`/shop/${product.users_commu_id}`)"
                             class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             <svg aria-hidden="true" class="-ml-0.5 mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -118,9 +118,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import axios from 'axios'
+import axiosClient from "@/utils/axios"
 import { useCartStore } from '@/stores/cart'
 import Rating from '@/components/Home/Rating.vue'
+import router from '@/router'
 
 interface Product {
     product_id: number
@@ -144,9 +145,24 @@ export default defineComponent({
 
         const useCartStores = useCartStore()
         const clearCart = () => useCartStores.clearCart()
+        const addtocart = (shop_id: any, product: any) => {
+            const useCartStores = useCartStore()
+            const numberInput = document.getElementById("numberInput") as HTMLInputElement
+            product = {
+                product_id: product.product_id,
+                name: product.name,
+                quantity: parseInt(numberInput.value),
+                price: product.price,
+                image_1: product.image_1,
+                gram: product.gram
+            }
+            useCartStores.addProduct(shop_id, product)
+            router.go(0)
+        }
 
         return {
-            clearCart
+            clearCart,
+            addtocart
         }
     },
     data() {
@@ -158,27 +174,10 @@ export default defineComponent({
     },
     methods: {
         async getDataProduct() {
-            const product = await axios.get('http://localhost:3001/api/products/' + this.$route.params.id)
+            const product = await axiosClient.get('/products/' + this.$route.params.id)
             this.product = product.data
-            console.log(this.product)
             this.maxproduct = this.product.quantity
             this.nowImg = this.product.image_1
-        },
-        addtocart(shop_id: any, product: any) {
-            const useCartStores = useCartStore()
-            const numberInput = document.getElementById("numberInput") as HTMLInputElement
-            product = {
-                product_id: product.product_id,
-                name: product.name,
-                quantity: parseInt(numberInput.value),
-                price: product.price,
-            }
-            useCartStores.addProduct(shop_id, product)
-            // const useCartStores = cartStore()
-            // const addProductToCart = (shop_id: number, product: { product_id: number; name: string }) => {
-            //     useCartStores.addProduct({ shop_id, product })
-            // }
-            // return addProductToCart
         },
         changeImg(image: any) {
             this.nowImg = image

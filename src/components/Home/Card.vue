@@ -4,7 +4,8 @@
         <!-- <div class="flex justify-items-center max-h-52">
             <img class="rounded-t-lg object-center w-full" :src="communityData.product_image" alt="" />
         </div> -->
-        <a href="#" class="flex rounded-t-lg justify-center" :style="`background-image: ${communityData.product_image};`">
+        <a @click="toShop(communityData.product_id)" class="flex rounded-t-lg justify-center"
+            :style="`background-image: ${communityData.product_image};`">
             <img class="rounded-t-lg h-[200px] w-[370px] sm:w-full" :src="communityData.product_image"
                 alt="product image" />
         </a>
