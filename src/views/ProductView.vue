@@ -103,7 +103,7 @@
                         </svg>
                         เพิ่มไปยังรถเข็น
                     </button>
-                    <button type="button" @click="clearCart"
+                    <button type="button" @click="addtocartandgo(product.users_commu_id, product)"
                         class="text-white bg-gradient-to-r inline-flex items-center from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg px-5 py-2.5 text-center mr-2 mb-2">
                         <div class="h-6 flex items-center">
                             ซื้อเลย
@@ -122,6 +122,7 @@ import axiosClient from "@/utils/axios"
 import { useCartStore } from '@/stores/cart'
 import Rating from '@/components/Home/Rating.vue'
 import router from '@/router'
+import { useAuthStore } from '@/stores/auth'
 
 interface Product {
     product_id: number
@@ -143,9 +144,13 @@ export default defineComponent({
     },
     setup() {
 
+        const userStore = useAuthStore()
         const useCartStores = useCartStore()
         const clearCart = () => useCartStores.clearCart()
         const addtocart = (shop_id: any, product: any) => {
+            if (!userStore.full_name) {
+                return router.push('/login')
+            }
             const useCartStores = useCartStore()
             const numberInput = document.getElementById("numberInput") as HTMLInputElement
             product = {
@@ -159,10 +164,29 @@ export default defineComponent({
             useCartStores.addProduct(shop_id, product)
             router.go(0)
         }
+        const addtocartandgo = (shop_id: any, product: any) => {
+            if (!userStore.full_name) {
+                return router.push('/login')
+            }
+            const useCartStores = useCartStore()
+            const numberInput = document.getElementById("numberInput") as HTMLInputElement
+            product = {
+                product_id: product.product_id,
+                name: product.name,
+                quantity: parseInt(numberInput.value),
+                price: product.price,
+                image_1: product.image_1,
+                gram: product.gram
+            }
+            useCartStores.addProduct(shop_id, product)
+            router.push('/cart')
+        }
 
         return {
             clearCart,
-            addtocart
+            addtocart,
+            addtocartandgo,
+            userStore
         }
     },
     data() {

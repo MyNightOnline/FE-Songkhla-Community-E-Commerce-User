@@ -20,7 +20,8 @@
                         <h2 class="text-xl font-bold mb-3">{{ shop_name }}</h2>
                         <div class="relative overflow-x-auto rounded-lg bg-white">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <thead
+                                    class="text-gray-700 text-lg uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
                                         <th style="width: 200px;" scope="col" class="px-6 py-3">
                                             ชื่อผลิตภัณฑ์
@@ -37,7 +38,7 @@
                                     <tr v-for="({ name, price, quantity }) in products" :key="name"
                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" style="width: 200px;"
-                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            class="px-6 py-4 text-basic text-lg font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <p style="width: 200px;" class="truncate overflow-hidden">
                                                 {{ name }}
                                             </p>
@@ -82,6 +83,21 @@
                         </div>
                     </div>
                     <div id="input-file-1" class="mt-3">
+
+                        <label for="countries" class="block mb-2 font-medium text-gray-900 dark:text-white">
+                            เลือกธนาคาร
+                        </label>
+                        <select id="countries"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected>Choose a country</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="FR">France</option>
+                            <option value="DE">Germany</option>
+                        </select>
+                        <div class="mb-3">
+
+                        </div>
                         <label class="block mb-2 font-medium text-gray-900 dark:text-white"
                             for="default_size">อัปโหลดสลีป</label>
                         <input
@@ -116,7 +132,7 @@ const handleFileUpload = (index: any, event: any) => {
 
 const calDeli = (products: any) => {
     let allGrams = 0
-    products.forEach((item: any) => {
+    products.forEach(async (item: any) => {
         allGrams += (item.gram * item.quantity)
     })
     return calDeliveryFee(allGrams)
@@ -147,6 +163,20 @@ const formatNumberToPrice = (number: number) => {
 
 onMounted(() => {
     if (useCartStore().cart.length == 0) return router.push('/')
+
+    console.log(allProducts)
+
+    allProducts.forEach((item: any) => {
+        console.log('**** Data for order *****')
+        console.log(`Shop ID: ${item.shop_id}`)
+        item.products.forEach((product: any) => {
+            console.log(`Product ID: ${product.product_id}`)
+            console.log(`Product Name: ${product.name}`)
+            console.log(`Product QTY: ${product.quantity}`)
+            console.log(`Product DELIVERY PRICE: ${calDeli(item.products)}`)
+            console.log(`Product ALL PRICE: ${calTotal(item.products)}`)
+        })
+    })
 })
 
 </script>

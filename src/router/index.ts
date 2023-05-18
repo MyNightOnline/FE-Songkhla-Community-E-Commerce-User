@@ -22,7 +22,8 @@ const router = createRouter({
         {
           path: '/product/:id',
           name: 'product',
-          component: () => import('@/views/ProductView.vue')
+          component: () => import('@/views/ProductView.vue'),
+          meta: { requiresAuth: false }
         },
         {
           path: '/shop',
@@ -70,15 +71,15 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to) => {
+router.beforeEach(async (to, from) => {
 
-  const publicPages = ['/login', '/signup', '/']
+  const publicPages = ['/login', '/signup', '/', '/product/:id']
   const authRequired = !publicPages.includes(to.path)
   const auth = useAuthStore()
   const data = JSON.parse(localStorage.getItem('user')!)
   if (data) auth.full_name = data.data.full_name
 
-  if (authRequired && !auth.full_name) {
+  if (authRequired && !auth.full_name && to.meta.requiresAuth) {
     return '/login'
   }
 })
