@@ -15,16 +15,123 @@
             </div>
             <div class="flex items-center">
                 <h1 class="text-lg">
-                    ที่อยู่สำหรับการจัดส่ง <span class="mr-2">146/5 หมู่ 1</span>
+                    ที่อยู่สำหรับการจัดส่ง <span class="mr-2">{{ address }}</span>
                 </h1>
                 <span
                     class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                     ค่าเริ่มต้น
                 </span>
-                <button type="button"
+                <button type="button" data-modal-target="staticModal10" data-modal-toggle="staticModal10"
                     class="px-3 py-2 text-xs font-medium text-center text-white bg-amber-500 rounded-lg hover:bg-amber-500 focus:ring-4 focus:outline-none focus:ring-bg-amber-500 dark:bg-amber-500 dark:hover:bg-amber-500 dark:focus:ring-bg-amber-500">
                     แก้ไข
                 </button>
+                <!-- Main modal -->
+                <div id="staticModal10" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+                    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative w-full max-w-2xl max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <!-- Modal header -->
+                            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                    ที่อยู่สำหรับการจัดส่ง
+                                </h3>
+                                <button type="button"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="staticModal10">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="p-6 space-y-6">
+
+                                <div class="grid gap-4 mb-6 md:grid-cols-2">
+                                    <div>
+                                        <label for="first_name"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                            ชื่อ-สกุล
+                                        </label>
+                                        <input type="text" id="first_name" v-model="full_name"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="ชื่อ-สกุล" required>
+                                    </div>
+                                    <div>
+                                        <label for="last_name"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                            หมายเลขโทรศัพท์
+                                        </label>
+                                        <input type="text" id="last_name" v-model="mobile"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="08X-XXXX-XXX" required>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center mb-4">
+                                    <input checked id="default-radio-1" type="radio" value="" name="default-radio"
+                                        @click="checkRaio(1)"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="default-radio-1"
+                                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                        {{ address }}
+                                        <span
+                                            class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                            ค่าเริ่มต้น
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input id="default-radio-2" type="radio" value="" name="default-radio"
+                                        @click="checkRaio(2)"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    <label for="default-radio-2"
+                                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                        ที่อยู่อื่น
+                                    </label>
+                                </div>
+                                <div class="mb-6">
+                                    <label for="default-input"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        ระบุ*
+                                    </label>
+                                    <input type="text" id="disabled-input" disabled v-model="anotherAddress"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+
+                                <div class="border-t-2"></div>
+
+                                <div>
+
+                                    <label for="message"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        รายละเอียด
+                                    </label>
+                                    <textarea id="message" rows="4" v-model="details"
+                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="เขียนรายละเอียดของคุณ (ทางเลือก)"></textarea>
+
+                                </div>
+
+                            </div>
+                            <!-- Modal footer -->
+                            <div
+                                class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                <button data-modal-hide="staticModal10" type="button"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    บันทึก
+                                </button>
+                                <button data-modal-hide="staticModal10" type="button"
+                                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                    ปิด
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -146,8 +253,13 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useCartStore } from '@/stores/cart'
+import { useAuthStore } from '@/stores/auth'
 import { calDeliveryFee } from '@/assets/functions/calDeliveryFee'
 import router from '@/router'
+
+import {
+    initModals,
+} from 'flowbite'
 
 let allProducts = useCartStore().cart
 console.log(allProducts)
@@ -184,6 +296,7 @@ const formatNumberToPrice = (number: number) => {
 }
 
 onMounted(async () => {
+    initModals()
     if (useCartStore().cart.length == 0) return router.push('/')
 
     // console.log(allProducts)
@@ -211,7 +324,11 @@ import { defineComponent } from 'vue'
 export default defineComponent({
     data() {
         return {
-
+            full_name: '',
+            mobile: '',
+            address: '',
+            details: '',
+            anotherAddress: '',
         }
     },
     methods: {
@@ -248,10 +365,19 @@ export default defineComponent({
 
             const eBtn = document.getElementById(`showBtn-${index}`) as HTMLElement
             eBtn.textContent = 'coppied'
+        },
+        checkRaio(id: any) {
+            const inputRaio = document.getElementById(`default-radio-${id}`) as HTMLInputElement
+            const disableInput = document.getElementById(`disabled-input`) as HTMLInputElement
+            if (id == 2) disableInput.disabled = false
+            else disableInput.disabled = true
         }
     },
     mounted() {
-
+        console.log(useAuthStore().user.data)
+        this.address = useAuthStore().user.data.address
+        this.mobile = useAuthStore().user.data.mobile
+        this.full_name = useAuthStore().user.data.full_name
     }
 })
 </script>
@@ -260,5 +386,9 @@ export default defineComponent({
 .required:after {
     content: " *";
     color: red;
+}
+
+.bg-gray-900 {
+    --tw-bg-opacity: 0.3;
 }
 </style>

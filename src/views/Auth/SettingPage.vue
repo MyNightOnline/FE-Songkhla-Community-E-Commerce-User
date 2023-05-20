@@ -1,52 +1,3 @@
-<script>
-import { useAuthStore } from '@/stores/auth'
-import axiosClient from '@/utils/axios'
-const userData = useAuthStore().user.data
-export default {
-
-    data: () => ({
-        users_id: userData.users_id,
-        full_name: userData.full_name,
-        address: userData.address,
-        username: userData.username,
-        defaultUsername: userData.username,
-        mobile: userData.mobile,
-        password: '',
-        cf_password: '',
-    }),
-
-    mounted() {
-
-    },
-
-    methods: {
-
-        async onSubmit() {
-
-            if ((this.password != '' && this.cf_password != '') && (this.password != this.cf_password)) {
-                alert('some password')
-            } else if (this.mobile.length > 10) {
-                alert('ใส่เบอร์โทร 10 ตัวเท่านั่น')
-            } else {
-                let putData = {
-                    users_id: this.users_id,
-                    username: this.defaultUsername,
-                    full_name: this.full_name,
-                    mobile: this.mobile,
-                    address: this.address,
-                    password: this.password
-                }
-                if (this.password == '' && this.cf_password == '') delete putData.password
-                let result = await axiosClient.put(`/auth/users/${this.users_id}`, putData)
-                useAuthStore().update(result.data)
-            }
-
-        },
-    },
-
-}
-</script>
-
 <template>
     <div
         class="mt-20 w-full max-w-lg container mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -111,3 +62,64 @@ export default {
         </form>
     </div>
 </template>
+
+
+<script>
+import { defineComponent } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import axiosClient from '@/utils/axios'
+export default defineComponent({
+
+    data: () => ({
+        users_id: '',
+        full_name: '',
+        address: '',
+        username: '',
+        defaultUsername: '',
+        mobile: '',
+        password: '',
+        cf_password: '',
+    }),
+
+    mounted() {
+        const userStore = useAuthStore()
+        if (!userStore.user) return this.$router.push('/login')
+        else {
+            this.users_id = userStore.user.data.users_id
+            this.full_name = userStore.user.data.full_name
+            this.address = userStore.user.data.address
+            this.username = userStore.user.data.username
+            this.defaultUsername = userStore.user.data.username
+            this.mobile = userStore.user.data.mobile
+            this.password = ''
+            this.cf_password = ''
+        }
+    },
+
+    methods: {
+
+        async onSubmit() {
+
+            if ((this.password != '' && this.cf_password != '') && (this.password != this.cf_password)) {
+                alert('some password')
+            } else if (this.mobile.length > 10) {
+                alert('ใส่เบอร์โทร 10 ตัวเท่านั่น')
+            } else {
+                let putData = {
+                    users_id: this.users_id,
+                    username: this.defaultUsername,
+                    full_name: this.full_name,
+                    mobile: this.mobile,
+                    address: this.address,
+                    password: this.password
+                }
+                if (this.password == '' && this.cf_password == '') delete putData.password
+                let result = await axiosClient.put(`/auth/users/${this.users_id}`, putData)
+                useAuthStore().update(result.data)
+            }
+
+        },
+    },
+
+})
+</script>

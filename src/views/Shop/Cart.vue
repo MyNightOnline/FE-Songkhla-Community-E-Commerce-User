@@ -1,6 +1,19 @@
 <template>
     <div class="container mx-auto">
 
+        <div class="mb-2">
+            <a href="#" @click="$router.push('/')"
+                class="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                ย้อนกลับ
+            </a>
+        </div>
+
         <div v-if="allProducts.length == 0"
             class="flex p-4 mb-4 text-lg text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
             role="alert">
@@ -138,7 +151,7 @@
             </div>
         </div>
 
-        <div class="flex justify-center">
+        <div class="flex justify-end mb-12">
             <button type="button" @click="redi"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 สั่งผลิตภัณฑ์
@@ -155,40 +168,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue'
 import { useCartStore } from '@/stores/cart'
 import { calDeliveryFee } from '@/assets/functions/calDeliveryFee'
 import router from '@/router'
-
-import { onMounted } from 'vue'
-import {
-    initAccordions,
-    initCarousels,
-    initCollapses,
-    initDials,
-    initDismisses,
-    initDrawers,
-    initDropdowns,
-    initModals,
-    initPopovers,
-    initTabs,
-    initTooltips
-} from 'flowbite'
-
-// initialize components based on data attribute selectors
-onMounted(() => {
-    initAccordions()
-    initCarousels()
-    initCollapses()
-    initDials()
-    initDismisses()
-    initDrawers()
-    initDropdowns()
-    initModals()
-    initPopovers()
-    initTabs()
-    initTooltips()
-})
 
 const allProducts = useCartStore().cart
 const removeProduct = useCartStore().deleteProduct
@@ -231,11 +213,4 @@ const formatNumberToPrice = (number: number) => {
     return number.toLocaleString('en-US')
 }
 
-</script>
-
-<script lang="ts">
-
-export default defineComponent({
-
-})
 </script>

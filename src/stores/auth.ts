@@ -33,7 +33,7 @@ export const useAuthStore = defineStore({
             this.user = null
             this.full_name = ''
             localStorage.removeItem('user')
-            router.go(0)
+            router.push('/')
         },
         update(resDarta: any) {
 

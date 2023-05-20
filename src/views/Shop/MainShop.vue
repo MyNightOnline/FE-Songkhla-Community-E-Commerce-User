@@ -1,36 +1,6 @@
 <script setup>
 import ProfileShop from '@/components/Shop/ProfileShop.vue'
 import ProductShop from '@/components/Shop/ProductShop.vue'
-
-import { onMounted } from 'vue'
-import {
-    initAccordions,
-    initCarousels,
-    initCollapses,
-    initDials,
-    initDismisses,
-    initDrawers,
-    initDropdowns,
-    initModals,
-    initPopovers,
-    initTabs,
-    initTooltips
-} from 'flowbite'
-
-// initialize components based on data attribute selectors
-onMounted(() => {
-    initAccordions()
-    initCarousels()
-    initCollapses()
-    initDials()
-    initDismisses()
-    initDrawers()
-    initDropdowns()
-    initModals()
-    initPopovers()
-    initTabs()
-    initTooltips()
-})
 </script>
 
 <script>
@@ -98,7 +68,6 @@ export default defineComponent({
 })
 </script>
 <template>
-
     <!-- NONE ERROR -->
     <ProfileShop :showData="showDataInShop" />
     <div class="container mx-auto">
@@ -136,5 +105,4 @@ export default defineComponent({
             </button>
         </div>
     </div>
-
 </template>

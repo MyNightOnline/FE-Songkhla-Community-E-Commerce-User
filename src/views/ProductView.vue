@@ -118,11 +118,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import axiosClient from "@/utils/axios"
 import { useCartStore } from '@/stores/cart'
+import { useAuthStore } from '@/stores/auth'
+import axiosClient from "@/utils/axios"
 import Rating from '@/components/Home/Rating.vue'
 import router from '@/router'
-import { useAuthStore } from '@/stores/auth'
 
 interface Product {
     product_id: number
