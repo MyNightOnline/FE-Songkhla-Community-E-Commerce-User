@@ -14,6 +14,15 @@ interface Shop {
     shop_id: number
     shop_name: string
     products: Product[]
+    banks: Bank[]
+}
+
+interface Bank {
+    bank_id: number
+    commu_id: number
+    bank_name: number
+    back_account: string
+    account_name: string
 }
 
 interface CartState {
@@ -30,10 +39,12 @@ export const useCartStore = defineStore({
             const shopIndex = this.cart.findIndex((shop) => shop.shop_id === shopId)
             if (shopIndex === -1) {
                 const result = await axiosClient.get('/commu/' + shopId)
+                const resAllBank = await axiosClient.get('/payment/commu/' + shopId)
                 this.cart.push({
                     shop_id: shopId,
                     shop_name: result.data.name,
                     products: [product],
+                    banks: resAllBank.data
                 })
             } else {
                 const productIndex = this.cart[shopIndex].products.findIndex(

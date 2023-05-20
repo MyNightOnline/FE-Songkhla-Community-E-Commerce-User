@@ -147,7 +147,7 @@ export default defineComponent({
         const userStore = useAuthStore()
         const useCartStores = useCartStore()
         const clearCart = () => useCartStores.clearCart()
-        const addtocart = (shop_id: any, product: any) => {
+        const addtocart = async (shop_id: any, product: any) => {
             if (!userStore.full_name) {
                 return router.push('/login')
             }
@@ -161,7 +161,7 @@ export default defineComponent({
                 image_1: product.image_1,
                 gram: product.gram
             }
-            useCartStores.addProduct(shop_id, product)
+            await useCartStores.addProduct(shop_id, product)
             router.go(0)
         }
         const addtocartandgo = (shop_id: any, product: any) => {
