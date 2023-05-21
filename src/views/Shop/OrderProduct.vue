@@ -268,12 +268,12 @@
                                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            <p>{{ textNoPay }}</p>
+                            <p class="text-red-500">{{ textNoPay }}</p>
                             {{ 'คุณต้องการสั่งผลิตภัณฑ์ ?' }}
                         </h3>
                         <button data-modal-hide="popup-modal" type="button" @click="onSubmitForm"
                             class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-                            ใช่ฉันต้องการสั่ง
+                            {{ checkNoPay() }}
                         </button>
                         <button data-modal-hide="popup-modal" type="button"
                             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
@@ -359,24 +359,43 @@ export default defineComponent({
         }
     },
     methods: {
+        checkNoPay() {
+            const allProducts = useCartStore().cart
+            this.noPay = 0
+            allProducts.forEach((item: any, index: number) => {
+                const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    // console.log('A file has been selected')
+                    this.noPay++
+                }
+                // else {
+                //     console.log('No file selected')
+                // }
+            })
+            if ((allProducts.length - this.noPay) != 0) {
+                return 'ฉันต้องการชำระเงินภายหลัง !'
+            } else {
+                return 'ใช่ฉันต้องการสั่ง'
+            }
+        },
         inputPlusNoPay() {
             const allProducts = useCartStore().cart
             this.noPay = 0
             allProducts.forEach((item: any, index: number) => {
                 const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
                 if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                    console.log('A file has been selected')
+                    // console.log('A file has been selected')
                     this.noPay++
-                } else {
-                    console.log('No file selected')
                 }
+                // else {
+                //     console.log('No file selected')
+                // }
             })
             if ((allProducts.length - this.noPay) != 0) {
                 this.textNoPay = 'คุณยังไม่ได้โอนเงิน !!'
             } else {
                 this.textNoPay = ''
             }
-            console.log(`${this.noPay} , ${allProducts.length}`)
         },
         handleSelect(index: number) {
             const e = document.getElementById(`countries-${index}`) as HTMLSelectElement

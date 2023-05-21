@@ -50,6 +50,33 @@ const router = createRouter({
           name: 'order-products',
           component: () => import('@/views/Shop/OrderProduct.vue')
         },
+        {
+          path: '/purchase',
+          name: 'purchase',
+          component: () => import('@/views/Shop/PurchasePage.vue'),
+          children: [
+            {
+              path: '/purchase/all',
+              name: 'purchase-all',
+              component: () => import('@/components/Purchase/All.vue')
+            },
+            {
+              path: '/purchase/unpaid',
+              name: 'purchase-unpaid',
+              component: () => import('@/components/Purchase/Unpaid.vue')
+            },
+            {
+              path: '/purchase/succeed',
+              name: 'purchase-succeed',
+              component: () => import('@/components/Purchase/Succeed.vue')
+            },
+            {
+              path: '/purchase/cancel',
+              name: 'purchase-cancel',
+              component: () => import('@/components/Purchase/Cancel.vue')
+            },
+          ]
+        },
         // authentication
         {
           path: '/login',
