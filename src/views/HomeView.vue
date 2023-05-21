@@ -61,7 +61,7 @@ export default defineComponent({
 
       data.filter(async (product) => {
         community.data.map(commu => {
-          if ((product.users_commu_id == commu.users_commu_id) && commu.confirm_status == 1) {
+          if ((product.users_commu_id == commu.users_commu_id) && commu.confirm_status == 1 && (product.quantity > 0)) {
             category.data.map(type => {
               if (product.category_id == type.category_id) {
                 return this.defaultData.push({

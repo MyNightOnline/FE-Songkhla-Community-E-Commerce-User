@@ -16,7 +16,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                         <span class="sr-only">Info</span>
-                        <h3 class="text-lg font-medium">กลุ่มวิสากิจชุมชนบ้านเราเอง</h3>
+                        <h3 class="text-lg font-medium">{{ shopName }}</h3>
                     </div>
                     <div class="mt-2 mb-4 text-sm">
                     </div>
@@ -37,7 +37,7 @@
                 <div class="flex">
                     <div class="ml-12 border-l-2">
                         <div class="ml-12">
-                            <h1>รายการผลิตภัณฑ์: <span>10</span></h1>
+                            <h1>รายการผลิตภัณฑ์: <span>{{ countProductShop }}</span></h1>
                         </div>
                     </div>
                 </div>
@@ -117,12 +117,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useCartStore } from '@/stores/cart'
 import { useAuthStore } from '@/stores/auth'
 import axiosClient from "@/utils/axios"
 import Rating from '@/components/Home/Rating.vue'
 import router from '@/router'
+import { useRoute } from 'vue-router'
 
 interface Product {
     product_id: number
@@ -186,7 +187,7 @@ export default defineComponent({
             clearCart,
             addtocart,
             addtocartandgo,
-            userStore
+            userStore,
         }
     },
     data() {
@@ -194,6 +195,9 @@ export default defineComponent({
             product: {} as Product,
             maxproduct: 0,
             nowImg: '',
+            shopName: '',
+            shopId: 0,
+            countProductShop: 0,
         }
     },
     methods: {
@@ -202,15 +206,22 @@ export default defineComponent({
             this.product = product.data
             this.maxproduct = this.product.quantity
             this.nowImg = this.product.image_1
+            const fetDataShop = await axiosClient.get('/commu/' + product.data.users_commu_id)
+            this.shopName = fetDataShop.data.name
+            this.shopId = fetDataShop.data.users_commu_id
         },
         changeImg(image: any) {
             this.nowImg = image
         },
+        async getTest() {
+            const product = await axiosClient.get('/products/' + useRoute().params.id)
+            const products = await axiosClient.get('/products/shop/' + product.data.users_commu_id)
+            this.countProductShop = products.data.length
+        }
     },
     mounted() {
         this.getDataProduct()
-
-
+        this.getTest()
         const decreaseBtn = document.getElementById("decreaseBtn") as HTMLButtonElement
         const increaseBtn = document.getElementById("increaseBtn") as HTMLButtonElement
         const numberInput = document.getElementById("numberInput") as HTMLInputElement

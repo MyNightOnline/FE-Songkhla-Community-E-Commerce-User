@@ -77,7 +77,7 @@
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="default-radio-1"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                        {{ address }}
+                                        {{ defaultAddress }}
                                         <span
                                             class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                                             ค่าเริ่มต้น
@@ -120,7 +120,7 @@
                             <!-- Modal footer -->
                             <div
                                 class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                <button data-modal-hide="staticModal10" type="button"
+                                <button data-modal-hide="staticModal10" type="button" @click="saveAddress"
                                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     บันทึก
                                 </button>
@@ -206,7 +206,7 @@
                     </div>
                     <div id="input-file-1" class="mt-3">
 
-                        <label for="countries" class="required block mb-2 font-medium text-gray-900 dark:text-white">
+                        <label for="countries" class="block mb-2 font-medium text-gray-900 dark:text-white">
                             เลือกธนาคาร
                         </label>
                         <select :id="`countries-${index}`" @change="handleSelect(index)"
@@ -230,9 +230,9 @@
                             <div>
                                 <label class="block mb-2 font-medium text-gray-900 dark:text-white"
                                     for="default_size">อัปโหลดสลีป</label>
-                                <input
+                                <input @input="inputPlusNoPay()"
                                     class="block w-full mb-5 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                    id="default_size" type="file" required>
+                                    :id="`default_size-${index}`" type="file" required>
                             </div>
                         </div>
                     </div>
@@ -241,10 +241,47 @@
         </div>
 
         <div class="flex justify-end">
-            <button type="button"
+            <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal"
                 class="px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 สั่งผลิตภัณฑ์
             </button>
+        </div>
+        <div id="popup-modal" tabindex="-1" data-modal-backdrop="popup-modal"
+            class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-md max-h-full">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <button type="button"
+                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                        data-modal-hide="popup-modal">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                    <div class="p-6 text-center">
+                        <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                            <p>{{ textNoPay }}</p>
+                            {{ 'คุณต้องการสั่งผลิตภัณฑ์ ?' }}
+                        </h3>
+                        <button data-modal-hide="popup-modal" type="button" @click="onSubmitForm"
+                            class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                            ใช่ฉันต้องการสั่ง
+                        </button>
+                        <button data-modal-hide="popup-modal" type="button"
+                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                            ไม่
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -262,7 +299,7 @@ import {
 } from 'flowbite'
 
 let allProducts = useCartStore().cart
-console.log(allProducts)
+// console.log(allProducts)
 
 const calDeli = (products: any) => {
     let allGrams = 0
@@ -300,26 +337,13 @@ onMounted(async () => {
     if (useCartStore().cart.length == 0) return router.push('/')
 
     // console.log(allProducts)
-
-    allProducts.forEach(async (item: any) => {
-        // console.log('**** Data for order *****')
-        // console.log(`Shop ID: ${item.shop_id}`)
-        // item.products.forEach((product: any) => {
-        //     console.log(`Product ID: ${product.product_id}`)
-        //     console.log(`Product Name: ${product.name}`)
-        //     console.log(`Product QTY: ${product.quantity}`)
-        //     console.log(`Product DELIVERY PRICE: ${calDeli(item.products)}`)
-        //     console.log(`Product ALL PRICE: ${calTotal(item.products)}`)
-        // })
-
-    })
-
 })
 
 </script>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import axiosClient from '@/utils/axios'
 
 export default defineComponent({
     data() {
@@ -327,11 +351,33 @@ export default defineComponent({
             full_name: '',
             mobile: '',
             address: '',
+            defaultAddress: '',
             details: '',
             anotherAddress: '',
+            noPay: 0,
+            textNoPay: '',
         }
     },
     methods: {
+        inputPlusNoPay() {
+            const allProducts = useCartStore().cart
+            this.noPay = 0
+            allProducts.forEach((item: any, index: number) => {
+                const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    console.log('A file has been selected')
+                    this.noPay++
+                } else {
+                    console.log('No file selected')
+                }
+            })
+            if ((allProducts.length - this.noPay) != 0) {
+                this.textNoPay = 'คุณยังไม่ได้โอนเงิน !!'
+            } else {
+                this.textNoPay = ''
+            }
+            console.log(`${this.noPay} , ${allProducts.length}`)
+        },
         handleSelect(index: number) {
             const e = document.getElementById(`countries-${index}`) as HTMLSelectElement
             const e2 = document.getElementById(`showTxt-${index}`) as HTMLSelectElement
@@ -371,13 +417,137 @@ export default defineComponent({
             const disableInput = document.getElementById(`disabled-input`) as HTMLInputElement
             if (id == 2) disableInput.disabled = false
             else disableInput.disabled = true
+        },
+        saveAddress() {
+            // const disableInput = document.getElementById(`disabled-input`) as HTMLInputElement
+            // if (id == 2) disableInput.disabled = false
+            const inputRaio2 = document.getElementById(`default-radio-2`) as HTMLInputElement
+            if (inputRaio2.checked) {
+                this.address = this.anotherAddress
+            } else {
+                this.address = this.defaultAddress
+            }
+        },
+        async onSubmitForm() {
+            const calDeli = (products: any) => {
+                let allGrams = 0
+                products.forEach(async (item: any) => {
+                    allGrams += (item.gram * item.quantity)
+                })
+                return calDeliveryFee(allGrams)
+            }
+
+            const calTotal = (products: any) => {
+                let allPrices = 0
+                let allGrams = 0
+                products.forEach((item: any) => {
+                    allPrices += (item.price * item.quantity)
+                    allGrams += (item.gram * item.quantity)
+                })
+                let result = allPrices + calDeliveryFee(allGrams)
+                return result
+            }
+
+            const totalPrice = (products: any) => {
+                let allPrices = 0
+                products.forEach((item: any) => {
+                    allPrices += (item.price * item.quantity)
+                })
+                return allPrices
+            }
+
+            let allProducts = useCartStore().cart
+            allProducts.forEach(async (item: any, index: number) => {
+                console.log('post order details ...')
+                const today = new Date()
+                const year = today.getFullYear()
+                const month = String(today.getMonth() + 1).padStart(2, '0')
+                const day = String(today.getDate()).padStart(2, '0')
+                const todayDate = `${year}-${month}-${day}`
+
+                let order_status = 0
+                let slipInsertId = 0
+                let inputFile = document.getElementById(`default_size-${index}`) as HTMLInputElement
+                let fileSize = Number(inputFile.files?.length)
+                if (fileSize > 0) {
+                    order_status = 1
+                    let file: File | null = null
+                    const formData = new FormData()
+                    if (inputFile.files && inputFile.files.length > 0) {
+                        file = inputFile.files[0]
+                        formData.append('file', file)
+                    }
+                    const postSlip = await axiosClient.post('/slippayment', formData)
+                    slipInsertId = await postSlip.data.insertId
+                }
+
+                let dataPost: {
+                    full_name: string,
+                    mobile: string,
+                    address: string,
+                    details: string,
+                    date: string,
+                    order_status: number,
+                    total_price: number,
+                    delivery_price: number,
+                    total: number,
+                    users_id: string,
+                    users_commu_id: string,
+                    payment_id?: number // Make payment_id property optional
+                } = {
+                    full_name: this.full_name,
+                    mobile: this.mobile,
+                    address: this.address,
+                    details: this.details,
+                    date: todayDate,
+                    order_status: order_status,
+                    total_price: totalPrice(item.products),
+                    delivery_price: calDeli(item.products),
+                    total: calTotal(item.products),
+                    users_id: useAuthStore().user.data.users_id,
+                    users_commu_id: item.shop_id,
+                    payment_id: slipInsertId // Include payment_id property
+                }
+
+                if (fileSize == 0) {
+                    // Conditionally remove payment_id property
+                    delete dataPost.payment_id
+                }
+
+                const resultPost = await axiosClient.post('/orders', dataPost)
+                const orderId = await resultPost.data.insertId
+                item.products.forEach(async (product: any, index: number) => {
+                    const getProduct = await axiosClient.get('/products/' + product.product_id)
+                    const qtyProduct = await getProduct.data.quantity
+                    console.log('qtyProduct - product.quantity')
+                    console.log(qtyProduct - product.quantity)
+                    const updateQtyProduct = await axiosClient.put('/products/qty/' + product.product_id, {
+                        "quantity": qtyProduct - product.quantity
+                    })
+                    const resultPost = await axiosClient.post('/orders/detail', {
+                        "order_id": orderId,
+                        "product_id": product.product_id,
+                        "quantity": product.quantity,
+                        "price": product.price * product.quantity
+                    })
+                })
+
+            })
+
+            useCartStore().clearCart()
+            setTimeout(() => {
+                location.href = '/'
+            }, 1000)
         }
     },
     mounted() {
-        console.log(useAuthStore().user.data)
+
         this.address = useAuthStore().user.data.address
+        this.defaultAddress = useAuthStore().user.data.address
         this.mobile = useAuthStore().user.data.mobile
         this.full_name = useAuthStore().user.data.full_name
+
+        this.inputPlusNoPay()
     }
 })
 </script>

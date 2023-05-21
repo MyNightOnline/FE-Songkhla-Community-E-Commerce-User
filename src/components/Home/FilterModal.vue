@@ -130,8 +130,7 @@ export default defineComponent({
                                 <select id="category"
                                     class="bg-gray-50 overflow-y-auto border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option class="" value="" selected>--- เลือกประเภท ---</option>
-                                    <option class="" v-for="(item, index) in categoryData" :key="index"
-                                        :value="item.name">
+                                    <option class="" v-for="(item, index) in categoryData" :key="index" :value="item.name">
                                         {{ item.name }}
                                     </option>
                                 </select>
@@ -159,3 +158,9 @@ export default defineComponent({
         </div>
     </div>
 </template>
+
+<style>
+.bg-gray-900 {
+    --tw-bg-opacity: 0.3
+}
+</style>
