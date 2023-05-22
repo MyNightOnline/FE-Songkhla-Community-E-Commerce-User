@@ -1,44 +1,7 @@
 <template>
     <div class="mt-10">
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <div v-if="noData"
-                class="p-4 text-lg font-bold text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert">
-                {{ noData }}
-            </div>
-            <table v-for="({ orderId, products }, index) in orders" :key="index" @click="toOrder(orderId)"
-                class="mb-10 w-full text-base text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Image</span>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            ชื่อผลิตภัณฑ์
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            ราคารวม
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="({ image_1, price, name }, index) in products" :key="index"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="w-32 p-4">
-                            <img :src="image_1" alt="Apple Watch">
-                        </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                            {{ name }}
-                        </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                            ฿{{ price }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
+        <TablePurchase :orders="orders" :noData="noData" />
 
     </div>
 </template>
@@ -47,8 +10,12 @@
 import axiosClient from '@/utils/axios'
 import { defineComponent } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import TablePurchase from './Table.vue'
 
 export default defineComponent({
+    components: {
+        TablePurchase
+    },
     data() {
         return {
             orders: [{
@@ -69,13 +36,11 @@ export default defineComponent({
         }
     },
     methods: {
-        toOrder(orderId: number) {
-            console.log(orderId)
-        },
         async fetchOrders() {
             try {
                 this.orders.pop()
                 const response = await axiosClient.get('/orders')
+                const sortedData = response.data.sort((a: any, b: any) => b.order_id - a.order_id)
                 const orders = response.data.map((order: any) => {
                     if (order.users_id == useAuthStore().user.data.users_id) {
                         return ({

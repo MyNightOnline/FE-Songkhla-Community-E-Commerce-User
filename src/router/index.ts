@@ -77,6 +77,11 @@ const router = createRouter({
             },
           ]
         },
+        {
+          path: '/purchase/order/:id',
+          name: 'order',
+          component: () => import('@/components/Purchase/order/Order.vue')
+        },
         // authentication
         {
           path: '/login',

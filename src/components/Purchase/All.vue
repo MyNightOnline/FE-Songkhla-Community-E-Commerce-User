@@ -1,39 +1,7 @@
 <template>
     <div class="mt-10">
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table v-for="({ orderId, products }, index) in orders" :key="index" @click="toOrder(orderId)"
-                class="mb-10 w-full text-base text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-base text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Image</span>
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            ชื่อผลิตภัณฑ์ {{ orderId }}
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            ราคารวม
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="({ image_1, name, price }, index) in products" :key="index"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="w-32 p-4">
-                            <img :src="image_1" alt="Apple Watch">
-                        </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                            {{ name }}
-                        </td>
-                        <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                            ฿{{ price }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
+        <TablePurchase :orders="orders" :noData="noData" />
 
     </div>
 </template>
@@ -42,12 +10,18 @@
 import axiosClient from '@/utils/axios'
 import { defineComponent } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import TablePurchase from './Table.vue'
 
 export default defineComponent({
+    components: {
+        TablePurchase
+    },
     data() {
         return {
             orders: [{
                 orderId: 0,
+                orderStatus: 0,
+                users_id: 0,
                 products: [
                     {
                         id: 0,
@@ -60,43 +34,47 @@ export default defineComponent({
                     }
                 ],
             }],
+            noData: '',
         }
     },
     methods: {
-        toOrder(orderId: number) {
-            console.log(orderId)
-        },
         async fetchOrders() {
             try {
                 this.orders.pop()
-                const response = await axiosClient.get('/orders')
-                const orders = response.data.map((order: any) => {
-                    console.log(order)
-                    if (order.users_id == useAuthStore().user.data.users_id) {
-                        return ({
-                            orderId: order.order_id,
-                            products: [],
-                        })
-                    }
+                const response = await axiosClient.get('/orders/user/' + useAuthStore().user.data.users_id)
+                const sortedData = await response.data.sort((a: any, b: any) => b.order_id - a.order_id)
+                const orders = await response.data.map((order: any) => {
+                    return ({
+                        orderId: order.order_id,
+                        orderStatus: order.order_status,
+                        users_id: order.users_id,
+                        products: [],
+                    })
                 })
                 await Promise.all(
                     orders.map(async (order: any) => {
-                        const detailResponse = await axiosClient.get(`/orders/detail/${order.orderId}`)
-                        order.products = await detailResponse.data
+                        if (order == undefined) return
+                        else {
+                            const detailResponse = await axiosClient.get(`/orders/detail/${order.orderId}`)
+                            order.products = await detailResponse.data
 
-                        await Promise.all(
-                            order.products.map(async (item: any) => {
-                                const product = await axiosClient.get('/products/' + item.product_id)
-                                const urlImg = await product.data.image_1
-                                const name = await product.data.name
-                                item['image_1'] = await urlImg
-                                item['name'] = await name
-                            })
-                        )
+                            await Promise.all(
+                                order.products.map(async (item: any) => {
+                                    const product = await axiosClient.get('/products/' + item.product_id)
+                                    const urlImg = await product.data.image_1
+                                    const name = await product.data.name
+                                    item['image_1'] = await urlImg
+                                    item['name'] = await name
+                                })
+                            )
+                        }
+
+
                     })
                 )
                 // console.log(orders)
                 this.orders = await orders
+                if (this.orders.length == 0) this.noData = 'ไม่มีข้อมูล'
             } catch (error) {
                 console.error(error)
             }

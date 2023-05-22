@@ -20,6 +20,7 @@
 <script lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { defineComponent } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 export default defineComponent({
     setup() {
@@ -42,6 +43,7 @@ export default defineComponent({
         }
     },
     mounted() {
+        if (!useAuthStore().user) this.$router.push('/login')
     }
 })
 </script>

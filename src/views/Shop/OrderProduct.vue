@@ -484,22 +484,6 @@ export default defineComponent({
                 const day = String(today.getDate()).padStart(2, '0')
                 const todayDate = `${year}-${month}-${day}`
 
-                let order_status = 0
-                let slipInsertId = 0
-                let inputFile = document.getElementById(`default_size-${index}`) as HTMLInputElement
-                let fileSize = Number(inputFile.files?.length)
-                if (fileSize > 0) {
-                    order_status = 1
-                    let file: File | null = null
-                    const formData = new FormData()
-                    if (inputFile.files && inputFile.files.length > 0) {
-                        file = inputFile.files[0]
-                        formData.append('file', file)
-                    }
-                    const postSlip = await axiosClient.post('/slippayment', formData)
-                    slipInsertId = await postSlip.data.insertId
-                }
-
                 let dataPost: {
                     full_name: string,
                     mobile: string,
@@ -519,36 +503,53 @@ export default defineComponent({
                     address: this.address,
                     details: this.details,
                     date: todayDate,
-                    order_status: order_status,
+                    order_status: 0,
                     total_price: totalPrice(item.products),
                     delivery_price: calDeli(item.products),
                     total: calTotal(item.products),
                     users_id: useAuthStore().user.data.users_id,
                     users_commu_id: item.shop_id,
-                    payment_id: slipInsertId // Include payment_id property
-                }
-
-                if (fileSize == 0) {
-                    // Conditionally remove payment_id property
-                    delete dataPost.payment_id
+                    payment_id: 0 // Include payment_id property
                 }
 
                 const resultPost = await axiosClient.post('/orders', dataPost)
                 const orderId = await resultPost.data.insertId
-                item.products.forEach(async (product: any, index: number) => {
+                item.products.forEach(async (product: any) => {
                     const getProduct = await axiosClient.get('/products/' + product.product_id)
                     const qtyProduct = await getProduct.data.quantity
                     console.log('qtyProduct - product.quantity')
                     console.log(qtyProduct - product.quantity)
-                    const updateQtyProduct = await axiosClient.put('/products/qty/' + product.product_id, {
+                    await axiosClient.put('/products/qty/' + product.product_id, {
                         "quantity": qtyProduct - product.quantity
                     })
-                    const resultPost = await axiosClient.post('/orders/detail', {
+                    await axiosClient.post('/orders/detail', {
                         "order_id": orderId,
                         "product_id": product.product_id,
                         "quantity": product.quantity,
                         "price": product.price * product.quantity
                     })
+                })
+
+                let order_status = 0
+                let slipInsertId = 0
+                let inputFile = document.getElementById(`default_size-${index}`) as HTMLInputElement
+                let fileSize = Number(inputFile.files?.length)
+                if (fileSize > 0) {
+                    order_status = 1
+                    let file: File | null = null
+                    const formData = new FormData()
+                    if (inputFile.files && inputFile.files.length > 0) {
+                        file = inputFile.files[0]
+                        formData.append('file', file)
+                        formData.append('order_id', orderId)
+                    }
+                    const postSlip = await axiosClient.post('/slippayment', formData)
+                    slipInsertId = await postSlip.data.insertId
+
+                }
+                await axiosClient.put('/orders/' + orderId, {
+                    order_status: order_status,
+                    payment_id: slipInsertId,
                 })
 
             })

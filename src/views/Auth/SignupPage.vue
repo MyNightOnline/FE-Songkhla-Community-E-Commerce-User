@@ -66,15 +66,15 @@ export default defineComponent({
             </h5>
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
-                    <label for="full_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="full_name" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         ชื่อเต็ม
                     </label>
                     <input v-model="users[0].full_name" type="text" id="full_name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="John" required />
+                        placeholder="ชื่อ-สกุล" required />
                 </div>
                 <div>
-                    <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="address" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         ที่อยู่
                     </label>
                     <input v-model="users[0].address" type="text" id="address"
@@ -82,7 +82,7 @@ export default defineComponent({
                         placeholder="...." required />
                 </div>
                 <div>
-                    <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="phone" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         เบอร์โทร
                     </label>
                     <input v-model="users[0].mobile" maxlength="10" type="tel" id="phone"
@@ -91,7 +91,7 @@ export default defineComponent({
                 </div>
             </div>
             <div class="mb-6">
-                <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label for="username" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     ชื่อผู้ใช้
                 </label>
                 <input v-model="users[0].username" type="text" id="username"
@@ -99,7 +99,7 @@ export default defineComponent({
                     placeholder="username" required />
             </div>
             <div class="mb-6">
-                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label for="password" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     รหัสผ่าน
                 </label>
                 <input v-model="users[0].password" type="password" id="password"
@@ -110,7 +110,7 @@ export default defineComponent({
                 </p>
             </div>
             <div class="mb-6">
-                <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label for="confirm_password" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     ยืนยันรหัสผ่าน
                 </label>
                 <input v-model="users[0].cf_password" type="password" id="confirm_password"
@@ -127,3 +127,14 @@ export default defineComponent({
         </form>
     </div>
 </template>
+
+<style>
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.bg-gray-900 {
+    --tw-bg-opacity: 0.3;
+}
+</style>

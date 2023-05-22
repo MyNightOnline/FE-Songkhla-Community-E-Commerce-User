@@ -11,22 +11,29 @@ export const useAuthStore = defineStore({
 
     actions: {
         async login(username: string, password: string) {
-            const user = await axiosClient.post('/auth/auth-user', {
-                username,
-                password
-            })
 
-            console.log(user)
+            try {
+                const user = await axiosClient.post('/auth/auth-user', {
+                    username,
+                    password
+                })
 
-            if (user.data.msg) return user.data.msg
+                console.log(user)
 
-            this.user = user.data
-            this.full_name = user.data.full_name
+                if (user.data.msg) return user.data.msg
 
-            localStorage.setItem('user', JSON.stringify(user))
-            router.push('/')
+                this.user = user.data
+                this.full_name = user.data.full_name
 
-            return user
+                localStorage.setItem('user', JSON.stringify(user))
+                alert('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ' + user.data.full_name)
+                router.push('/')
+
+                return user
+            } catch (error: any) {
+                alert('รหัสผ่านผิด / ' + error.response.data.message)
+                console.error(error.response.data.message)
+            }
 
         },
         logout() {
