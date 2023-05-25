@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axiosClient from '@/utils/axios'
+import router from '@/router'
 
 interface Product {
     product_id: number
@@ -101,21 +102,25 @@ export const useCartStore = defineStore({
             }
         },
         deleteProduct(shopId: number, productId: number): void {
-            const shopIndex = this.cart.findIndex((shop) => shop.shop_id === shopId)
-            if (shopIndex !== -1) {
-                const productIndex = this.cart[shopIndex].products.findIndex(
-                    (p) => p.product_id === productId
-                )
-                if (productIndex !== -1) {
-                    const product = this.cart[shopIndex].products[productIndex]
-                    this.cart[shopIndex].products.splice(productIndex, 1)
-                    if (this.cart[shopIndex].products.length === 0) {
-                        this.cart.splice(shopIndex, 1)
+            if (confirm('คุณต้องการลบผลิตภัณฑ์นี้ ?')) {
+                const shopIndex = this.cart.findIndex((shop) => shop.shop_id === shopId)
+                if (shopIndex !== -1) {
+                    const productIndex = this.cart[shopIndex].products.findIndex(
+                        (p) => p.product_id === productId
+                    )
+                    if (productIndex !== -1) {
+                        const product = this.cart[shopIndex].products[productIndex]
+                        this.cart[shopIndex].products.splice(productIndex, 1)
+                        if (this.cart[shopIndex].products.length === 0) {
+                            this.cart.splice(shopIndex, 1)
+                        }
+                        localStorage.setItem('cart', JSON.stringify(this.cart))
+                        console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
                     }
-                    localStorage.setItem('cart', JSON.stringify(this.cart))
-                    console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
                 }
+                router.go(0)
             }
+
         },
         clearCart(): void {
             this.cart = []

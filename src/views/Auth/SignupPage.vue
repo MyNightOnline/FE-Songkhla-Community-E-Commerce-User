@@ -67,7 +67,7 @@ export default defineComponent({
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                     <label for="full_name" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        ชื่อเต็ม
+                        ชื่อ-สกุล
                     </label>
                     <input v-model="users[0].full_name" type="text" id="full_name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -83,7 +83,7 @@ export default defineComponent({
                 </div>
                 <div>
                     <label for="phone" class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        เบอร์โทร
+                        เบอร์โทรศัพท์
                     </label>
                     <input v-model="users[0].mobile" maxlength="10" type="tel" id="phone"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

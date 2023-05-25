@@ -103,7 +103,7 @@ const postOrder = async () => {
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in shoppingStore.cartItems" :key="index">
-                                <td>{{ index+ 1 + '. ' + item.name }}</td>
+                                <td>{{ index + 1 + '. ' + item.name }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>฿ {{ item.price }}</td>
                             </tr>
@@ -138,11 +138,10 @@ const postOrder = async () => {
                                 placeholder=" " />
                             <label for="floating_repeat_full_name"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                ชื่อเต็ม</label>
+                                ชื่อ-สกุล</label>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
-                            <input v-model="orderDetails.address" type="text" name="floating_address"
-                                id="floating_address"
+                            <input v-model="orderDetails.address" type="text" name="floating_address" id="floating_address"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " />
                             <label for="floating_address"
@@ -155,11 +154,10 @@ const postOrder = async () => {
                                 placeholder=" " />
                             <label for="floating_phone"
                                 class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                เบอร์โทร</label>
+                                เบอร์โทรศัพท์</label>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
-                            <input v-model="orderDetails.details" type="text" name="floating_details"
-                                id="floating_details"
+                            <input v-model="orderDetails.details" type="text" name="floating_details" id="floating_details"
                                 class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" " />
                             <label for="floating_details"

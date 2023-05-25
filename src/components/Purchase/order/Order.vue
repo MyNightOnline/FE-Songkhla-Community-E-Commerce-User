@@ -1,5 +1,19 @@
 <template>
     <div class="container mx-auto">
+
+        <div class="mb-3">
+            <a href="#" @click="$router.go(-1)"
+                class="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                ย้อนกลับ
+            </a>
+        </div>
+
         <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
             <div class="lg:flex lg:justify-items-center lg:justify-between">
@@ -62,7 +76,7 @@
                         id="file_input" type="file">
 
                     <div class="mt-3 w-full">
-                        <button type="button"
+                        <button id="updateSlip" type="button" @click="updateOrder()"
                             class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                             อัปโหลดสลีป
                         </button>
@@ -137,7 +151,7 @@
 <script lang="ts">
 import axiosClient from '@/utils/axios'
 import { defineComponent } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { getClassOrderStatus, getTextOrderStatus } from '../function'
 
 export default defineComponent({
@@ -210,6 +224,15 @@ export default defineComponent({
         async cancelOrder(order_id: any) {
             if (confirm('คุณต้องการยกเลิกคำสั่งซื้อ ?')) {
                 console.log('deleting...')
+                let order_details = await axiosClient.get('/orders/detail/' + order_id)
+                await order_details.data.forEach(async (order_detail: any) => {
+                    let getProduct = await axiosClient.get('/products/' + order_detail.product_id)
+                    let updateQty = await axiosClient.put('/products/qty/' + getProduct.data.product_id, {
+                        quantity: order_detail.quantity + getProduct.data.quantity
+                    })
+                    console.log(updateQty)
+                    console.log(`** Update Qty Success.`)
+                })
                 const deleteOrderById = await axiosClient.put('/orders/' + order_id, {
                     order_status: 4
                 })
@@ -244,6 +267,26 @@ export default defineComponent({
 
             const inputSelect = document.getElementById('bankinput') as HTMLSelectElement
             navigator.clipboard.writeText(inputSelect.value)
+        },
+        async updateOrder() {
+            const slipInput = document.getElementById('file_input') as HTMLInputElement
+            const fileSize = Number(slipInput.files?.length)
+            if (!fileSize) return alert('กรุณาอัปโหลดสลีป')
+
+            const file = slipInput.files ? slipInput.files[0] : null
+            const formData = new FormData()
+            formData.append('file', file as Blob)
+            formData.append('order_id', this.$route.params.id as any)
+            const uploadSlip = await axiosClient.post('/slippayment', formData)
+            const dataSlip = await uploadSlip.data
+            const slipId = await dataSlip.insertId
+            const order_status = 1
+            const payment_id = await slipId
+            await axiosClient.put('/orders/' + this.$route.params.id, {
+                order_status: order_status,
+                payment_id: payment_id
+            })
+            this.$router.go(0)
         }
     },
     async mounted() {

@@ -2,7 +2,7 @@
     <div class="container mx-auto">
 
         <div class="mb-2">
-            <a href="#" @click="$router.push('/')"
+            <a href="#" @click="$router.go(-1)"
                 class="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                 <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +102,7 @@
                                     ฿{{ formatNumberToPrice(price * quantity) }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="#" @click="removeProduct(shop_id, product_id), router.go(0)"
+                                    <a href="#" @click="removeProduct(shop_id, product_id)"
                                         class="text-lg flex items-center font-medium text-red-600 dark:text-red-500 hover:underline">
                                         <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" stroke-width="1.5"
                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -170,7 +170,6 @@
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cart'
 import { calDeliveryFee } from '@/assets/functions/calDeliveryFee'
-import router from '@/router'
 
 const allProducts = useCartStore().cart
 const removeProduct = useCartStore().deleteProduct
