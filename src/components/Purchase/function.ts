@@ -1,7 +1,7 @@
 export function getTextOrderStatus(statusId: any) {
     if (statusId == 0) return 'ยังไม่ชำระเงิน'
     else if (statusId == 1) return 'ชำระเงินแล้ว'
-    else if (statusId == 2) return 'กำลังจัดส่ง'
+    else if (statusId == 2) return 'เตรียมผลิตภัณฑ์'
     else if (statusId == 3) return 'จัดส่งผลิตภัณฑ์'
     else if (statusId == 4) return 'ยกเลิก'
     else return 'error'

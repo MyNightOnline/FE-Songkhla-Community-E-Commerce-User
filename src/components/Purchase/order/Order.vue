@@ -47,43 +47,7 @@
                         ยกเลิกคำสั่งซื้อ
                     </button>
                 </div>
-                <div v-if="order.order_status == 0">
 
-                    <label for="bankinput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        เลือกธนาคาร
-                    </label>
-                    <select id="bankinput" v-model="bank" @change="changeTextAccount"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option disabled>-- เลือกธนาคาร --</option>
-                        <option v-for="({ bank_name, back_account }, index) in banks" :value="back_account" :key="index">
-                            {{ bank_name }}
-                        </option>
-                    </select>
-
-                    <div id="divAccount" class="hidden">
-                        <p class="text-lg my-3 inline-flex mr-2">หมายเลขบัญชี: <span id="showTextBank">---</span></p>
-                        <button type="button" id="btnCopy" @click="copyAccount"
-                            class="inline-flex px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Copy
-                        </button>
-                    </div>
-
-                    <label class="block my-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">
-                        อัปโหลดสลีป
-                    </label>
-                    <input
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        id="file_input" type="file">
-
-                    <div class="mt-3 w-full">
-                        <button id="updateSlip" type="button" @click="updateOrder()"
-                            class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                            อัปโหลดสลีป
-                        </button>
-                    </div>
-
-
-                </div>
             </div>
 
         </div>
@@ -143,6 +107,44 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="p-4" v-if="order.order_status == 0">
+
+                <label for="bankinput" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    เลือกธนาคาร
+                </label>
+                <select id="bankinput" v-model="bank" @change="changeTextAccount"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option disabled>-- เลือกธนาคาร --</option>
+                    <option v-for="({ bank_name, back_account }, index) in banks" :value="back_account" :key="index">
+                        {{ bank_name }}
+                    </option>
+                </select>
+
+                <div id="divAccount" class="hidden">
+                    <p class="text-lg my-3 inline-flex mr-2">หมายเลขบัญชี: <span id="showTextBank">---</span></p>
+                    <button type="button" id="btnCopy" @click="copyAccount"
+                        class="inline-flex px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Copy
+                    </button>
+                </div>
+
+                <form @submit.prevent="updateOrder()">
+                    <label class="block my-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">
+                        อัปโหลดสลีป
+                    </label>
+                    <input
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="file_input" type="file" required>
+
+                    <div class="mt-3 w-full">
+                        <button id="updateSlip" type="submit"
+                            class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                            อัปโหลดสลีป
+                        </button>
+                    </div>
+                </form>
+
+            </div>
         </div>
 
     </div>
@@ -224,15 +226,15 @@ export default defineComponent({
         async cancelOrder(order_id: any) {
             if (confirm('คุณต้องการยกเลิกคำสั่งซื้อ ?')) {
                 console.log('deleting...')
-                let order_details = await axiosClient.get('/orders/detail/' + order_id)
-                await order_details.data.forEach(async (order_detail: any) => {
-                    let getProduct = await axiosClient.get('/products/' + order_detail.product_id)
-                    let updateQty = await axiosClient.put('/products/qty/' + getProduct.data.product_id, {
-                        quantity: order_detail.quantity + getProduct.data.quantity
-                    })
-                    console.log(updateQty)
-                    console.log(`** Update Qty Success.`)
-                })
+                // let order_details = await axiosClient.get('/orders/detail/' + order_id)
+                // await order_details.data.forEach(async (order_detail: any) => {
+                //     let getProduct = await axiosClient.get('/products/' + order_detail.product_id)
+                //     let updateQty = await axiosClient.put('/products/qty/' + getProduct.data.product_id, {
+                //         quantity: order_detail.quantity + getProduct.data.quantity
+                //     })
+                //     console.log(updateQty)
+                //     console.log(`** Update Qty Success.`)
+                // })
                 const deleteOrderById = await axiosClient.put('/orders/' + order_id, {
                     order_status: 4
                 })

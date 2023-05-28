@@ -95,8 +95,8 @@
                                 </div>
                                 <div class="mb-6">
                                     <label for="default-input"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                        ระบุ*
+                                        class="required block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        ระบุ
                                     </label>
                                     <input type="text" id="disabled-input" disabled v-model="anotherAddress"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -277,7 +277,7 @@
                         </button>
                         <button data-modal-hide="popup-modal" type="button"
                             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                            ไม่
+                            ชำระเงิน
                         </button>
                     </div>
                 </div>
@@ -373,9 +373,9 @@ export default defineComponent({
                 // }
             })
             if ((allProducts.length - this.noPay) != 0) {
-                return 'ฉันต้องการชำระเงินภายหลัง !'
+                return 'สั่งผลิตภัณฑ์'
             } else {
-                return 'ใช่ฉันต้องการสั่ง'
+                return 'ใช่ต้องการสั่ง'
             }
         },
         inputPlusNoPay() {
@@ -384,12 +384,12 @@ export default defineComponent({
             allProducts.forEach((item: any, index: number) => {
                 const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
                 if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                    // console.log('A file has been selected')
+                    console.log('A file has been selected')
                     this.noPay++
                 }
-                // else {
-                //     console.log('No file selected')
-                // }
+                else {
+                    console.log('No file selected')
+                }
             })
             if ((allProducts.length - this.noPay) != 0) {
                 this.textNoPay = 'คุณยังไม่ได้โอนเงิน !!'
@@ -519,11 +519,11 @@ export default defineComponent({
                     const qtyProduct = await getProduct.data.quantity
                     console.log('qtyProduct - product.quantity')
                     console.log(qtyProduct - product.quantity)
-                    await axiosClient.put('/products/qty/' + product.product_id, {
-                        "quantity": qtyProduct - product.quantity
-                    })
+                    // await axiosClient.put('/products/qty/' + product.product_id, {
+                    //     "quantity": qtyProduct - product.quantity
+                    // })
                     await axiosClient.post('/orders/detail', {
-                        "order_id": orderId,
+                        "order_id": await orderId,
                         "product_id": product.product_id,
                         "quantity": product.quantity,
                         "price": product.price * product.quantity
@@ -532,14 +532,16 @@ export default defineComponent({
 
                 let order_status = 0
                 let slipInsertId = 0
-                let inputFile = document.getElementById(`default_size-${index}`) as HTMLInputElement
-                let fileSize = Number(inputFile.files?.length)
+                const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
+                let fileSize = Number(fileInput.files?.length)
                 if (fileSize > 0) {
+                    console.log('step 1')
                     order_status = 1
                     let file: File | null = null
                     const formData = new FormData()
-                    if (inputFile.files && inputFile.files.length > 0) {
-                        file = inputFile.files[0]
+                    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                        console.log('step 2')
+                        file = fileInput.files[0]
                         formData.append('file', file)
                         formData.append('order_id', orderId)
                     }
@@ -551,17 +553,16 @@ export default defineComponent({
                     order_status: order_status,
                     payment_id: slipInsertId,
                 })
-
+                console.log('step 3')
             })
 
             useCartStore().clearCart()
             setTimeout(() => {
-                location.href = '/'
+                location.href = '/purchase/all'
             }, 1000)
         }
     },
     mounted() {
-
         this.address = useAuthStore().user.data.address
         this.defaultAddress = useAuthStore().user.data.address
         this.mobile = useAuthStore().user.data.mobile
