@@ -44,7 +44,6 @@ let orderDetails = {
 }
 
 const postOrder = async () => {
-    console.log(shoppingStore.cartItems)
     if ([
         orderDetails.full_name,
         orderDetails.address,

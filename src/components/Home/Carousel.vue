@@ -4,26 +4,28 @@
     <div class="relative h-56 overflow-hidden rounded-lg md:h-[480px]">
       <!-- Item 1 -->
       <div class="hidden duration-700 ease-in-out" data-carousel-item>
-        <img src="https://th-test-11.slatic.net/p/34e591819e280a0c3eb0c64a73e9c434.jpg"
+        <img src="https://smce.doae.go.th/smce1/images/Product/59002051000120181228100754.jpg"
           class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
       </div>
       <!-- Item 2 -->
       <div class="hidden duration-700 ease-in-out" data-carousel-item>
-        <img
-          src="https://storage.googleapis.com/skru-project-c1214.appspot.com/images/1681950127021_apples-143457_1920.jpg?GoogleAccessId=firebase-adminsdk-iuwtq%40skru-project-c1214.iam.gserviceaccount.com&Expires=1710608400&Signature=jkaAmS0XvcgqFKgCVB8GNeilqk%2BhLRymvY1SQQj59vYtTcD%2FvlKfREYjc1M5bsSEOiQfwiUuJpvrFXkf3RURnO%2BkKanUQQ9BDNl5wwqaP4t6M66DOatM%2BQWo67NhvOQfxuVruv97M3A6rnJlnj%2BoVWqM6iLECuFIwL3YADmyit8C3%2FK4KMvPhncoroeFrta35VeFUdvrSbBOB8qIu39u7S4pii3ckW3LQ7a%2B0olxDyAVkLuQGvHvmjcaykErNVWckuhRhC3qujan9mFycNXjs1119CcfC3k0W3%2BL9Xzm4W0D7DjoZhA0J5zJtZpAB05QMVe4KoBvoweqRPUgzkwSzQ%3D%3D"
+        <img src="https://smce.doae.go.th/smce1/images/Product/59004101000220061030160811.jpg"
           class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
       </div>
       <!-- Item 3 -->
       <div class="hidden duration-700 ease-in-out" data-carousel-item>
-        <img src="./p3.jpg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        <img src="https://smce.doae.go.th/smce1/images/Product/59014021000920061201141615.JPG"
+          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
       </div>
       <!-- Item 4 -->
       <div class="hidden duration-700 ease-in-out" data-carousel-item>
-        <img src="./p4.jpg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        <img src="https://smce.doae.go.th/smce1/images/Product/59001061000620170816091312.jpg"
+          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
       </div>
       <!-- Item 5 -->
       <div class="hidden duration-700 ease-in-out" data-carousel-item>
-        <img src="./p5.jpg" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        <img src="https://smce.doae.go.th/smce1/images/Product/59016031002120230328112424.jpg"
+          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
       </div>
     </div>
     <!-- Slider indicators -->

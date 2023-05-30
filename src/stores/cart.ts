@@ -63,7 +63,6 @@ export const useCartStore = defineStore({
                 }
             }
             localStorage.setItem('cart', JSON.stringify(this.cart))
-            console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
         },
         async increaseQuantity(shopId: number, productId: number) {
             const shopIndex = this.cart.findIndex((shop) => shop.shop_id === shopId)
@@ -81,7 +80,6 @@ export const useCartStore = defineStore({
                         return alert('ไม่สามารถเพิ่มได้ สินค้าเต็มหรืออาจหมด')
                     product.quantity += 1
                     localStorage.setItem('cart', JSON.stringify(this.cart))
-                    console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
                 }
             }
         },
@@ -96,7 +94,6 @@ export const useCartStore = defineStore({
                     if (product.quantity > 1) {
                         product.quantity -= 1
                         localStorage.setItem('cart', JSON.stringify(this.cart))
-                        console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
                     }
                 }
             }
@@ -115,7 +112,6 @@ export const useCartStore = defineStore({
                             this.cart.splice(shopIndex, 1)
                         }
                         localStorage.setItem('cart', JSON.stringify(this.cart))
-                        console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
                     }
                 }
                 router.go(0)
@@ -125,7 +121,6 @@ export const useCartStore = defineStore({
         clearCart(): void {
             this.cart = []
             localStorage.removeItem('cart')
-            console.log(JSON.parse(localStorage.getItem('cart') || '[]'))
         },
         async checkFullQtyProduct(product_id: any, qtyOld: any): Promise<number> {
             const product = await axiosClient.get('/products/' + product_id)

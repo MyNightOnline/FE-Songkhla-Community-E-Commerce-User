@@ -18,18 +18,16 @@ export const useAuthStore = defineStore({
                     password
                 })
 
-                console.log(user)
-
                 if (user.data.msg) return user.data.msg
 
                 this.user = user.data
                 this.full_name = user.data.full_name
 
                 localStorage.setItem('user', JSON.stringify(user))
-                alert('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ' + user.data.full_name)
                 router.push('/')
 
                 return user
+
             } catch (error: any) {
                 alert('รหัสผ่านผิด / ' + error.response.data.message)
                 console.error(error.response.data.message)
@@ -40,14 +38,13 @@ export const useAuthStore = defineStore({
             this.user = null
             this.full_name = ''
             localStorage.removeItem('user')
+            localStorage.removeItem('cart')
             router.push('/')
         },
         update(resDarta: any) {
 
             const user = localStorage.getItem('user')!
             const data = JSON.parse(user)
-
-            console.log(resDarta.data)
 
             data.data.address = resDarta.data.address
             data.data.full_name = resDarta.data.full_name

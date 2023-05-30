@@ -56,8 +56,8 @@ export default {
             const result = await authStore.login(this.username, this.password)
 
             setTimeout(() => {
-                if (result.data.msg == "Password or username is incorrect.") this.err = result.data.msg
-            }, 2000)
+                if (result == 'Password or username is incorrect.') return alert('ชื่อผู้ใช้หรือรหัสผ่านผิด')
+            }, 1000)
 
         },
     },

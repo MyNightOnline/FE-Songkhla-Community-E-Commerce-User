@@ -215,30 +215,23 @@ export default defineComponent({
             this.order = dataOrder
             this.orderDetails = dataOrderDetails
 
-            // console.log(dataOrder)
-            // console.log(dataOrderDetails)
             this.totalOrder = {
                 order: dataOrder,
                 orderDetails: dataOrderDetails
             }
-            // console.log(this.totalOrder)
         },
         async cancelOrder(order_id: any) {
             if (confirm('คุณต้องการยกเลิกคำสั่งซื้อ ?')) {
-                console.log('deleting...')
                 // let order_details = await axiosClient.get('/orders/detail/' + order_id)
                 // await order_details.data.forEach(async (order_detail: any) => {
                 //     let getProduct = await axiosClient.get('/products/' + order_detail.product_id)
                 //     let updateQty = await axiosClient.put('/products/qty/' + getProduct.data.product_id, {
                 //         quantity: order_detail.quantity + getProduct.data.quantity
                 //     })
-                //     console.log(updateQty)
-                //     console.log(`** Update Qty Success.`)
                 // })
-                const deleteOrderById = await axiosClient.put('/orders/' + order_id, {
+                await axiosClient.put('/orders/' + order_id, {
                     order_status: 4
                 })
-                console.log(deleteOrderById)
                 setTimeout(() => {
                     this.$router.go(0)
                 }, 1000)
@@ -271,24 +264,46 @@ export default defineComponent({
             navigator.clipboard.writeText(inputSelect.value)
         },
         async updateOrder() {
-            const slipInput = document.getElementById('file_input') as HTMLInputElement
-            const fileSize = Number(slipInput.files?.length)
-            if (!fileSize) return alert('กรุณาอัปโหลดสลีป')
 
-            const file = slipInput.files ? slipInput.files[0] : null
-            const formData = new FormData()
-            formData.append('file', file as Blob)
-            formData.append('order_id', this.$route.params.id as any)
-            const uploadSlip = await axiosClient.post('/slippayment', formData)
-            const dataSlip = await uploadSlip.data
-            const slipId = await dataSlip.insertId
-            const order_status = 1
-            const payment_id = await slipId
-            await axiosClient.put('/orders/' + this.$route.params.id, {
-                order_status: order_status,
-                payment_id: payment_id
-            })
-            this.$router.go(0)
+            let count = 0
+            if (count == 0) {
+                const detailsOrder = await axiosClient.get('/orders/detail/' + this.$route.params.id)
+                const dataDetails = detailsOrder.data
+                dataDetails.forEach(async (detail: any) => {
+                    const getProduct = await axiosClient.get('/products/' + detail.product_id)
+                    const qtyProduct = await getProduct.data.quantity
+                    if (detail.quantity > qtyProduct) {
+                        alert('มีผลิตภัณฑ์ไม่เพียงพอ ระบบจะยกเลิกคำสั่งซื้ออัตโนมัติ')
+                        await axiosClient.put('/orders/' + this.$route.params.id, {
+                            order_status: 4,
+                        })
+                        return this.$router.go(0)
+                    } else {
+                        count = 1
+                    }
+                })
+            }
+
+            if (count == 1) {
+                const slipInput = document.getElementById('file_input') as HTMLInputElement
+                const fileSize = Number(slipInput.files?.length)
+                if (!fileSize) return alert('กรุณาอัปโหลดสลีป')
+
+                const file = slipInput.files ? slipInput.files[0] : null
+                const formData = new FormData()
+                formData.append('file', file as Blob)
+                formData.append('order_id', this.$route.params.id as any)
+                const uploadSlip = await axiosClient.post('/slippayment', formData)
+                const dataSlip = await uploadSlip.data
+                const slipId = await dataSlip.insertId
+                const order_status = 1
+                const payment_id = await slipId
+                await axiosClient.put('/orders/' + this.$route.params.id, {
+                    order_status: order_status,
+                    payment_id: payment_id
+                })
+                this.$router.go(0)
+            }
         }
     },
     async mounted() {

@@ -122,7 +122,7 @@
                                 <td class="px-6 py-3"></td>
                                 <td class="px-6 py-3 flex items-center">
                                     ฿{{ calDeli(products) }}
-                                    <a :data-tooltip-target="`tooltip-default${index}`" href="#" class="ml-1">
+                                    <a :data-tooltip-target="`tooltip-default${index}`" href="/cal-deli-fee" class="ml-1">
                                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
                                             stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                                             aria-hidden="true">
@@ -175,7 +175,6 @@ const allProducts = useCartStore().cart
 const removeProduct = useCartStore().deleteProduct
 const increase = useCartStore().increaseQuantity
 const reduce = useCartStore().reduceQuantity
-console.log(allProducts)
 
 const redi = () => {
     return window.location.href = '/cart/order-products'

@@ -299,7 +299,6 @@ import {
 } from 'flowbite'
 
 let allProducts = useCartStore().cart
-// console.log(allProducts)
 
 const calDeli = (products: any) => {
     let allGrams = 0
@@ -336,7 +335,6 @@ onMounted(async () => {
     initModals()
     if (useCartStore().cart.length == 0) return router.push('/')
 
-    // console.log(allProducts)
 })
 
 </script>
@@ -365,12 +363,8 @@ export default defineComponent({
             allProducts.forEach((item: any, index: number) => {
                 const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
                 if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                    // console.log('A file has been selected')
                     this.noPay++
                 }
-                // else {
-                //     console.log('No file selected')
-                // }
             })
             if ((allProducts.length - this.noPay) != 0) {
                 return 'สั่งผลิตภัณฑ์'
@@ -384,11 +378,7 @@ export default defineComponent({
             allProducts.forEach((item: any, index: number) => {
                 const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
                 if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                    console.log('A file has been selected')
                     this.noPay++
-                }
-                else {
-                    console.log('No file selected')
                 }
             })
             if ((allProducts.length - this.noPay) != 0) {
@@ -475,9 +465,10 @@ export default defineComponent({
                 return allPrices
             }
 
-            let allProducts = useCartStore().cart
-            allProducts.forEach(async (item: any, index: number) => {
-                console.log('post order details ...')
+            let cc = 0
+
+            let allProducts = await useCartStore().cart
+            await allProducts.forEach(async (item: any, index: number) => {
                 const today = new Date()
                 const year = today.getFullYear()
                 const month = String(today.getMonth() + 1).padStart(2, '0')
@@ -516,9 +507,7 @@ export default defineComponent({
                 const orderId = await resultPost.data.insertId
                 item.products.forEach(async (product: any) => {
                     const getProduct = await axiosClient.get('/products/' + product.product_id)
-                    const qtyProduct = await getProduct.data.quantity
-                    console.log('qtyProduct - product.quantity')
-                    console.log(qtyProduct - product.quantity)
+                    // const qtyProduct = await getProduct.data.quantity
                     // await axiosClient.put('/products/qty/' + product.product_id, {
                     //     "quantity": qtyProduct - product.quantity
                     // })
@@ -534,13 +523,12 @@ export default defineComponent({
                 let slipInsertId = 0
                 const fileInput = document.getElementById(`default_size-${index}`) as HTMLInputElement
                 let fileSize = Number(fileInput.files?.length)
+                console.log(fileSize)
                 if (fileSize > 0) {
-                    console.log('step 1')
                     order_status = 1
                     let file: File | null = null
                     const formData = new FormData()
                     if (fileInput && fileInput.files && fileInput.files.length > 0) {
-                        console.log('step 2')
                         file = fileInput.files[0]
                         formData.append('file', file)
                         formData.append('order_id', orderId)
@@ -549,17 +537,18 @@ export default defineComponent({
                     slipInsertId = await postSlip.data.insertId
 
                 }
-                await axiosClient.put('/orders/' + orderId, {
+                const upload = await axiosClient.put('/orders/' + orderId, {
                     order_status: order_status,
                     payment_id: slipInsertId,
                 })
-                console.log('step 3')
+                if (await upload) {
+                    cc++
+                }
             })
-
-            useCartStore().clearCart()
-            setTimeout(() => {
+            await useCartStore().clearCart()
+            await setTimeout(() => {
                 location.href = '/purchase/all'
-            }, 1000)
+            }, 2000)
         }
     },
     mounted() {

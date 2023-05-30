@@ -23,7 +23,6 @@ export default defineComponent({
             price: this.showData.price,
             otop: this.showData.otop,
         }
-        console.log(this.showData)
     }
 })
 </script>

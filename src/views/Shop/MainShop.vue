@@ -102,7 +102,7 @@ export default defineComponent({
             this.defaultCommuData.map(el => {
                 this.arrCommuId.push(el.commu_id)
             })
-            if (!this.arrCommuId.includes(parseInt(this.$route.params.id))) this.$router.push('/')
+            // if (!this.arrCommuId.includes(parseInt(this.$route.params.id))) this.$router.push('/')
         }
     }
 })

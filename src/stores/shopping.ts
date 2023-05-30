@@ -30,7 +30,6 @@ export const useShoppingStore = defineStore('shopping', {
             this.count++
         },
         addToCart(item: ProductInfo) {
-            console.log(item)
             const index = this.cartItems.findIndex(product => product.id === item.id)
             if (index != -1) {
                 if (item.quantity == this.cartItems[index].quantity) {
@@ -46,7 +45,6 @@ export const useShoppingStore = defineStore('shopping', {
                 this.cartItems.map(product => {
                     if (product.shop_id != item.shop_id) {
                         if (confirm() == true) {
-                            console.log('ร้านใหม่')
                             this.cartItems = []
                         } else {
                             return

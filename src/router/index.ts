@@ -51,6 +51,11 @@ const router = createRouter({
           component: () => import('@/views/Shop/OrderProduct.vue')
         },
         {
+          path: '/cal-deli-fee',
+          name: 'cal-deli-fee',
+          component: () => import('@/views/Shop/CalDeliFee.vue')
+        },
+        {
           path: '/purchase',
           name: 'purchase',
           component: () => import('@/views/Shop/PurchasePage.vue'),

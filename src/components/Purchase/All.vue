@@ -72,7 +72,7 @@ export default defineComponent({
 
                     })
                 )
-                // console.log(orders)
+
                 this.orders = await orders
                 if (this.orders.length == 0) this.noData = 'ไม่มีข้อมูล'
             } catch (error) {

@@ -21,7 +21,7 @@
                     <div class="mt-2 mb-4 text-sm">
                     </div>
                     <div class="flex">
-                        <button type="button" @click="$router.push(`/shop/${product.users_commu_id}`)"
+                        <button type="button" @click="$router.push(`/shop/${shopId}`)"
                             class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             <svg aria-hidden="true" class="-ml-0.5 mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -73,8 +73,16 @@
                 <div class="text-xl font-semibold">
                     <h1>ราคา ฿{{ product.price }}</h1>
                 </div>
-                <div>
-                    <h1>ราคาจัดส่ง ฿{{ product.price }}</h1>
+                <div class="flex items-center">
+                    <h1>ราคาจัดส่ง ฿{{ calDeliveryFee(product.gram) }}</h1>
+                    <a href="/cal-deli-fee">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z">
+                            </path>
+                        </svg>
+                    </a>
                 </div>
                 <div>
                     <div class="flex items-center">
@@ -124,6 +132,7 @@ import axiosClient from "@/utils/axios"
 import Rating from '@/components/Home/Rating.vue'
 import router from '@/router'
 import { useRoute } from 'vue-router'
+import { calDeliveryFee } from '@/assets/functions/calDeliveryFee'
 
 interface Product {
     product_id: number
@@ -188,6 +197,7 @@ export default defineComponent({
             addtocart,
             addtocartandgo,
             userStore,
+            calDeliveryFee,
         }
     },
     data() {
@@ -203,12 +213,16 @@ export default defineComponent({
     methods: {
         async getDataProduct() {
             const product = await axiosClient.get('/products/' + this.$route.params.id)
+            if (product.data.quantity == 0) {
+                alert('ไม่มีผลิตภัณฑ์นี้ หรือ ผลิตภัณฑ์อาจหมด')
+                return this.$router.push('/')
+            }
             this.product = product.data
             this.maxproduct = this.product.quantity
             this.nowImg = this.product.image_1
-            const fetDataShop = await axiosClient.get('/commu/' + product.data.users_commu_id)
+            const fetDataShop = await axiosClient.get('/commu/v2/' + product.data.users_commu_id)
             this.shopName = fetDataShop.data.name
-            this.shopId = fetDataShop.data.users_commu_id
+            this.shopId = fetDataShop.data.commu_id
         },
         changeImg(image: any) {
             this.nowImg = image
