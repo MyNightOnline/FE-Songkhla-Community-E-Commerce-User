@@ -92,7 +92,7 @@ export default defineComponent({
       let newDataIn
 
       if (input_radio[0].checked == true) {
-
+        console.log('1 checked')
         newDataIn = this.defaultData.filter((el) => {
           if (check_amp == '' && check_category == '') return newDataIn = this.defaultData
           else if ((check_amp) && (check_category == '')) return el.amp == check_amp
@@ -100,17 +100,30 @@ export default defineComponent({
           else if (check_category && check_amp) return el.category_name == check_category && el.amp == check_amp
         })
       } else {
+        console.log('not 1 checked')
         let _index
         input_radio.forEach((item, index) => {
-          if (item.checked == true) return _index = index
+          if (item.checked == true) {
+            if (index == 1) {
+              index = 6
+              newDataIn = this.defaultData.filter((el) => {
+                return el.otop == 0
+              })
+            } else {
+              index = index - 1
+            }
+            return _index = index
+          }
         })
-
-        newDataIn = this.defaultData.filter((el) => {
-          if (check_amp == '' && check_category == '') return newDataIn = this.defaultData && el.otop == _index
-          else if ((check_amp) && (check_category == '')) return el.amp == check_amp && el.otop == _index
-          else if (check_category && (check_amp == '')) return el.category_name == check_category && el.otop == _index
-          else if (check_category && check_amp) return el.category_name == check_category && el.amp == check_amp && el.otop == _index
-        })
+        console.log(_index)
+        if (_index != 6) {
+          newDataIn = this.defaultData.filter((el) => {
+            if (check_amp == '' && check_category == '') return newDataIn = this.defaultData && el.otop == _index
+            else if ((check_amp) && (check_category == '')) return el.amp == check_amp && el.otop == _index
+            else if (check_category && (check_amp == '')) return el.category_name == check_category && el.otop == _index
+            else if (check_category && check_amp) return el.category_name == check_category && el.amp == check_amp && el.otop == _index
+          })
+        }
       }
       this.showData = newDataIn
     },
