@@ -264,9 +264,10 @@ export default defineComponent({
             navigator.clipboard.writeText(inputSelect.value)
         },
         async updateOrder() {
-
+            console.log('tst')
             let count = 0
             if (count == 0) {
+                console.log(0)
                 const detailsOrder = await axiosClient.get('/orders/detail/' + this.$route.params.id)
                 const dataDetails = detailsOrder.data
                 dataDetails.forEach(async (detail: any) => {
@@ -279,30 +280,26 @@ export default defineComponent({
                         })
                         return this.$router.go(0)
                     } else {
-                        count = 1
+                        const slipInput = document.getElementById('file_input') as HTMLInputElement
+                        const fileSize = Number(slipInput.files?.length)
+                        if (!fileSize) return alert('กรุณาอัปโหลดสลีป')
+
+                        const file = slipInput.files ? slipInput.files[0] : null
+                        const formData = new FormData()
+                        formData.append('file', file as Blob)
+                        formData.append('order_id', this.$route.params.id as any)
+                        const uploadSlip = await axiosClient.post('/slippayment', formData)
+                        const dataSlip = await uploadSlip.data
+                        const slipId = await dataSlip.insertId
+                        const order_status = 1
+                        const payment_id = await slipId
+                        await axiosClient.put('/orders/' + this.$route.params.id, {
+                            order_status: order_status,
+                            payment_id: payment_id
+                        })
+                        this.$router.go(0)
                     }
                 })
-            }
-
-            if (count == 1) {
-                const slipInput = document.getElementById('file_input') as HTMLInputElement
-                const fileSize = Number(slipInput.files?.length)
-                if (!fileSize) return alert('กรุณาอัปโหลดสลีป')
-
-                const file = slipInput.files ? slipInput.files[0] : null
-                const formData = new FormData()
-                formData.append('file', file as Blob)
-                formData.append('order_id', this.$route.params.id as any)
-                const uploadSlip = await axiosClient.post('/slippayment', formData)
-                const dataSlip = await uploadSlip.data
-                const slipId = await dataSlip.insertId
-                const order_status = 1
-                const payment_id = await slipId
-                await axiosClient.put('/orders/' + this.$route.params.id, {
-                    order_status: order_status,
-                    payment_id: payment_id
-                })
-                this.$router.go(0)
             }
         }
     },
