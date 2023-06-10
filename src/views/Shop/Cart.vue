@@ -141,7 +141,7 @@
                             <tr class="font-semibold text-gray-900 dark:text-white">
                                 <th scope="row" class="px-6 py-3 text-base">รวม</th>
                                 <td class="px-6 py-3"></td>
-                                <td class="px-6 py-3">{{ tatalProduct(products) }}</td>
+                                <td class="px-6 py-3"></td>
                                 <td class="px-6 py-3">฿{{ calTotal(products) }}</td>
                             </tr>
                         </tfoot>

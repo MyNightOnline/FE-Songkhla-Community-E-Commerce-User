@@ -39,7 +39,8 @@ export const useAuthStore = defineStore({
             this.full_name = ''
             localStorage.removeItem('user')
             localStorage.removeItem('cart')
-            router.push('/')
+            window.location.href = '/login'
+            // router.push('/login')
         },
         update(resDarta: any) {
 

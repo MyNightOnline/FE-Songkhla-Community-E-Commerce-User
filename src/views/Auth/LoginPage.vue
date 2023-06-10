@@ -43,8 +43,10 @@ import { useAuthStore } from '@/stores/auth'
 export default {
 
     data: () => ({
-        username: 'user01',
-        password: '1234',
+        // username: 'user01',
+        // password: '1234',
+        username: '',
+        password: '',
         err: '',
     }),
 
