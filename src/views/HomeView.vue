@@ -20,7 +20,6 @@ import FromSearch from '@/components/Home/FromSearch.vue'
 
 import { getAmphure } from '@/assets/functions/fetchAreaSongkhla.ts'
 
-// initialize components based on data attribute selectors
 onMounted(() => {
   initAccordions()
   initCarousels()
@@ -52,36 +51,33 @@ export default defineComponent({
   },
   methods: {
     async getData() {
-      this.ampAll = getAmphure()
+      try {
+        this.ampAll = getAmphure()
 
-      let { data } = await axiosClient.get('/products')
-      let community = await axiosClient.get('/commu')
-      let category = await axiosClient.get("/category")
-      this.categoryAll = category.data
+        const category = await axiosClient.get("/category")
+        this.categoryAll = category.data
 
-      data.filter(async (product) => {
-        community.data.map(commu => {
-          if ((product.users_commu_id == commu.users_commu_id) && commu.confirm_status == 1 && (product.quantity > 0)) {
-            category.data.map(type => {
-              if (product.category_id == type.category_id) {
-                return this.defaultData.push({
-                  product_id: product.product_id,
-                  product_name: product.name,
-                  product_image: product.image_1,
-                  otop: product.otop,
-                  users_commu_id: product.users_commu_id,
-                  category_id: product.category_id,
-                  community_name: commu.name,
-                  amp: commu.amp,
-                  category_name: type.name,
-                  price: product.price
-                })
-              }
-            })
-          }
+        const shopProducts = await axiosClient.get('/products/shop')
+
+        shopProducts.data.map(data => {
+          this.defaultData.push({
+            product_id: data.product_id,
+            product_name: data.name,
+            product_image: data.image_1,
+            otop: data.otop,
+            users_commu_id: data.users_commu_id,
+            category_id: data.category_id,
+            community_name: data.community_name,
+            amp: data.amp,
+            category_name: data.category_name,
+            price: data.price
+          })
         })
-      })
-      this.showData = this.defaultData
+
+        this.showData = this.defaultData
+      } catch (error) {
+        console.log(`ERROR: ${error}`)
+      }
     },
     filterData() {
 

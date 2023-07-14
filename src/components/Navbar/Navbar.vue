@@ -16,11 +16,10 @@
         </button>
     </div>
 
-    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 shadow-lgs">
         <div class="flex flex-wrap items-center justify-between container mx-auto p-4">
             <StartMenu />
             <CenterMenu />
-            <!-- <EndMenu /> -->
         </div>
     </nav>
 </template>
@@ -30,18 +29,15 @@
 <script lang="ts">
 import StartMenu from '@/components/Navbar/Menu/StartMenu.vue'
 import CenterMenu from '@/components/Navbar/Menu/CenterMenu.vue'
-// import EndMenu from '@/components/Navbar/Menu/EndMenu.vue'
 import { useCartStore } from '@/stores/cart'
 
 import { defineComponent } from 'vue'
 
 export default defineComponent({
     name: 'Navbar',
-    // Component options here
     components: {
         StartMenu,
         CenterMenu,
-        // EndMenu
     },
     data() {
         return {
