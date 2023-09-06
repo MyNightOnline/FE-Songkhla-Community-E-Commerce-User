@@ -4,7 +4,6 @@ dist/
 
 # Ignore environment-specific files
 .env
-.env.*
 
 # Ignore log files
 logs/
